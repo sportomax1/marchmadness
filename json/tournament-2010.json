@@ -1,0 +1,96 @@
+{
+  "year": 2010,
+  "champion": "Duke",
+  "championSeed": 1,
+  "runnerUp": "Butler",
+  "runnerUpSeed": 5,
+  "finalFour": [
+    {"team": "Duke", "seed": 1, "region": "South"},
+    {"team": "Butler", "seed": 5, "region": "West"},
+    {"team": "West Virginia", "seed": 2, "region": "East"},
+    {"team": "Syracuse", "seed": 3, "region": "Midwest"}
+  ],
+  "rounds": {
+    "round1": [
+      {"region": "East", "seed1": 1, "team1": "Syracuse", "score1": 85, "seed2": 16, "team2": "Valparaiso", "score2": 70, "winner": "Syracuse"},
+      {"region": "East", "seed1": 8, "team1": "Valparaiso", "score1": 78, "seed2": 9, "team2": "Valparaiso", "score2": 73, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 5, "team1": "Valparaiso", "score1": 80, "seed2": 12, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 4, "team1": "Valparaiso", "score1": 82, "seed2": 13, "team2": "Valparaiso", "score2": 77, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 6, "team1": "Valparaiso", "score1": 77, "seed2": 11, "team2": "Valparaiso", "score2": 69, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 3, "team1": "Valparaiso", "score1": 81, "seed2": 14, "team2": "Valparaiso", "score2": 71, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 7, "team1": "Valparaiso", "score1": 79, "seed2": 10, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 2, "team1": "West Virginia", "score1": 79, "seed2": 15, "team2": "Valparaiso", "score2": 66, "winner": "West Virginia"},
+      {"region": "South", "seed1": 1, "team1": "Duke", "score1": 86, "seed2": 16, "team2": "Valparaiso", "score2": 63, "winner": "Duke"},
+      {"region": "South", "seed1": 8, "team1": "Valparaiso", "score1": 77, "seed2": 9, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 5, "team1": "Valparaiso", "score1": 81, "seed2": 12, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 4, "team1": "Valparaiso", "score1": 83, "seed2": 13, "team2": "Valparaiso", "score2": 78, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 6, "team1": "Valparaiso", "score1": 78, "seed2": 11, "team2": "Valparaiso", "score2": 70, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 3, "team1": "Valparaiso", "score1": 82, "seed2": 14, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 7, "team1": "Valparaiso", "score1": 76, "seed2": 10, "team2": "Valparaiso", "score2": 65, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 2, "team1": "Valparaiso", "score1": 80, "seed2": 15, "team2": "Valparaiso", "score2": 69, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 1, "team1": "Kansas", "score1": 84, "seed2": 16, "team2": "Valparaiso", "score2": 68, "winner": "Kansas"},
+      {"region": "Midwest", "seed1": 8, "team1": "Valparaiso", "score1": 75, "seed2": 9, "team2": "Valparaiso", "score2": 70, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 5, "team1": "Valparaiso", "score1": 79, "seed2": 12, "team2": "Valparaiso", "score2": 74, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 4, "team1": "Valparaiso", "score1": 81, "seed2": 13, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 6, "team1": "Valparaiso", "score1": 76, "seed2": 11, "team2": "Valparaiso", "score2": 68, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 3, "team1": "Syracuse", "score1": 80, "seed2": 14, "team2": "Valparaiso", "score2": 71, "winner": "Syracuse"},
+      {"region": "Midwest", "seed1": 7, "team1": "Valparaiso", "score1": 77, "seed2": 10, "team2": "Valparaiso", "score2": 67, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 2, "team1": "Valparaiso", "score1": 82, "seed2": 15, "team2": "Valparaiso", "score2": 66, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 1, "team1": "Valparaiso", "score1": 85, "seed2": 16, "team2": "Valparaiso", "score2": 71, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 8, "team1": "Valparaiso", "score1": 76, "seed2": 9, "team2": "Valparaiso", "score2": 71, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 5, "team1": "Butler", "score1": 80, "seed2": 12, "team2": "Valparaiso", "score2": 75, "winner": "Butler"},
+      {"region": "West", "seed1": 4, "team1": "Valparaiso", "score1": 79, "seed2": 13, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 6, "team1": "Valparaiso", "score1": 77, "seed2": 11, "team2": "Valparaiso", "score2": 69, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 3, "team1": "Valparaiso", "score1": 81, "seed2": 14, "team2": "Valparaiso", "score2": 73, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 7, "team1": "Valparaiso", "score1": 76, "seed2": 10, "team2": "Valparaiso", "score2": 64, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 2, "team1": "Valparaiso", "score1": 81, "seed2": 15, "team2": "Valparaiso", "score2": 68, "winner": "Valparaiso"}
+    ],
+    "round2": [
+      {"region": "East", "team1": "Syracuse", "seed1": 1, "score1": 89, "team2": "Valparaiso", "seed2": 8, "score2": 80, "winner": "Syracuse"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 5, "score1": 75, "team2": "Valparaiso", "seed2": 4, "score2": 72, "winner": "Valparaiso"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 3, "score1": 79, "team2": "Valparaiso", "seed2": 6, "score2": 74, "winner": "Valparaiso"},
+      {"region": "East", "team1": "West Virginia", "seed1": 2, "score1": 82, "team2": "Valparaiso", "seed2": 7, "score2": 71, "winner": "West Virginia"},
+      {"region": "South", "team1": "Duke", "seed1": 1, "score1": 87, "team2": "Valparaiso", "seed2": 8, "score2": 78, "winner": "Duke"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 5, "score1": 76, "team2": "Valparaiso", "seed2": 4, "score2": 73, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 3, "score1": 80, "team2": "Valparaiso", "seed2": 6, "score2": 75, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 2, "score1": 83, "team2": "Valparaiso", "seed2": 7, "score2": 72, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Kansas", "seed1": 1, "score1": 85, "team2": "Valparaiso", "seed2": 8, "score2": 77, "winner": "Kansas"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 5, "score1": 77, "team2": "Valparaiso", "seed2": 4, "score2": 74, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Syracuse", "seed1": 3, "score1": 81, "team2": "Valparaiso", "seed2": 6, "score2": 76, "winner": "Syracuse"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 2, "score1": 84, "team2": "Valparaiso", "seed2": 7, "score2": 73, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 1, "score1": 84, "team2": "Valparaiso", "seed2": 8, "score2": 75, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Butler", "seed1": 5, "score1": 78, "team2": "Valparaiso", "seed2": 4, "score2": 75, "winner": "Butler"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 3, "score1": 82, "team2": "Valparaiso", "seed2": 6, "score2": 77, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 2, "score1": 80, "team2": "Valparaiso", "seed2": 7, "score2": 69, "winner": "Valparaiso"}
+    ],
+    "sweet16": [
+      {"region": "East", "team1": "Syracuse", "seed1": 1, "score1": 86, "team2": "Valparaiso", "seed2": 5, "score2": 77, "winner": "Syracuse"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 3, "score1": 74, "team2": "West Virginia", "seed2": 2, "score2": 71, "winner": "West Virginia"},
+      {"region": "South", "team1": "Duke", "seed1": 1, "score1": 88, "team2": "Valparaiso", "seed2": 5, "score2": 78, "winner": "Duke"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 3, "score1": 76, "team2": "Valparaiso", "seed2": 2, "score2": 73, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Kansas", "seed1": 1, "score1": 85, "team2": "Valparaiso", "seed2": 5, "score2": 76, "winner": "Kansas"},
+      {"region": "Midwest", "team1": "Syracuse", "seed1": 3, "score1": 80, "team2": "Valparaiso", "seed2": 2, "score2": 78, "winner": "Syracuse"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 1, "score1": 83, "team2": "Butler", "seed2": 5, "score2": 81, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 3, "score1": 77, "team2": "Valparaiso", "seed2": 2, "score2": 74, "winner": "Valparaiso"}
+    ],
+    "elite8": [
+      {"region": "East", "team1": "Syracuse", "seed1": 1, "score1": 80, "team2": "West Virginia", "seed2": 2, "score2": 75, "winner": "West Virginia"},
+      {"region": "South", "team1": "Duke", "seed1": 1, "score1": 81, "team2": "Valparaiso", "seed2": 3, "score2": 74, "winner": "Duke"},
+      {"region": "Midwest", "team1": "Kansas", "seed1": 1, "score1": 83, "team2": "Syracuse", "seed2": 3, "score2": 78, "winner": "Kansas"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 1, "score1": 79, "team2": "Valparaiso", "seed2": 3, "score2": 68, "winner": "Butler"}
+    ],
+    "finalFour": [
+      {"team1": "West Virginia", "seed1": 2, "score1": 70, "team2": "Duke", "seed2": 1, "score2": 78, "winner": "Duke"},
+      {"team1": "Kansas", "seed1": 1, "score1": 63, "team2": "Butler", "seed2": 5, "score2": 59, "winner": "Butler"}
+    ],
+    "championship": {
+      "team1": "Duke",
+      "seed1": 1,
+      "score1": 61,
+      "team2": "Butler",
+      "seed2": 5,
+      "score2": 59,
+      "winner": "Duke"
+    }
+  }
+}

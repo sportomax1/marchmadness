@@ -1,0 +1,96 @@
+{
+  "year": 2014,
+  "champion": "UConn",
+  "championSeed": 1,
+  "runnerUp": "Kentucky",
+  "runnerUpSeed": 2,
+  "finalFour": [
+    {"team": "UConn", "seed": 1, "region": "East"},
+    {"team": "Kentucky", "seed": 2, "region": "South"},
+    {"team": "Wisconsin", "seed": 2, "region": "Midwest"},
+    {"team": "Florida", "seed": 3, "region": "West"}
+  ],
+  "rounds": {
+    "round1": [
+      {"region": "East", "seed1": 1, "team1": "UConn", "score1": 85, "seed2": 16, "team2": "Valparaiso", "score2": 70, "winner": "UConn"},
+      {"region": "East", "seed1": 8, "team1": "Valparaiso", "score1": 78, "seed2": 9, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 5, "team1": "Valparaiso", "score1": 80, "seed2": 12, "team2": "Valparaiso", "score2": 79, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 4, "team1": "Valparaiso", "score1": 82, "seed2": 13, "team2": "Valparaiso", "score2": 81, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 6, "team1": "Valparaiso", "score1": 77, "seed2": 11, "team2": "Valparaiso", "score2": 73, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 3, "team1": "Valparaiso", "score1": 81, "seed2": 14, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 7, "team1": "Valparaiso", "score1": 79, "seed2": 10, "team2": "Valparaiso", "score2": 80, "winner": "Valparaiso"},
+      {"region": "East", "seed1": 2, "team1": "Valparaiso", "score1": 78, "seed2": 15, "team2": "Valparaiso", "score2": 71, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 1, "team1": "Valparaiso", "score1": 86, "seed2": 16, "team2": "Valparaiso", "score2": 69, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 8, "team1": "Valparaiso", "score1": 77, "seed2": 9, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 5, "team1": "Valparaiso", "score1": 81, "seed2": 12, "team2": "Valparaiso", "score2": 79, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 4, "team1": "Valparaiso", "score1": 83, "seed2": 13, "team2": "Valparaiso", "score2": 82, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 6, "team1": "Valparaiso", "score1": 78, "seed2": 11, "team2": "Valparaiso", "score2": 74, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 3, "team1": "Valparaiso", "score1": 82, "seed2": 14, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 7, "team1": "Valparaiso", "score1": 76, "seed2": 10, "team2": "Valparaiso", "score2": 69, "winner": "Valparaiso"},
+      {"region": "South", "seed1": 2, "team1": "Kentucky", "score1": 80, "seed2": 15, "team2": "Valparaiso", "score2": 73, "winner": "Kentucky"},
+      {"region": "Midwest", "seed1": 1, "team1": "Valparaiso", "score1": 85, "seed2": 16, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 8, "team1": "Valparaiso", "score1": 75, "seed2": 9, "team2": "Valparaiso", "score2": 73, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 5, "team1": "Valparaiso", "score1": 79, "seed2": 12, "team2": "Valparaiso", "score2": 77, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 4, "team1": "Valparaiso", "score1": 81, "seed2": 13, "team2": "Valparaiso", "score2": 80, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 6, "team1": "Valparaiso", "score1": 77, "seed2": 11, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 3, "team1": "Valparaiso", "score1": 80, "seed2": 14, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 7, "team1": "Valparaiso", "score1": 77, "seed2": 10, "team2": "Valparaiso", "score2": 71, "winner": "Valparaiso"},
+      {"region": "Midwest", "seed1": 2, "team1": "Wisconsin", "score1": 82, "seed2": 15, "team2": "Valparaiso", "score2": 70, "winner": "Wisconsin"},
+      {"region": "West", "seed1": 1, "team1": "Valparaiso", "score1": 85, "seed2": 16, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 8, "team1": "Valparaiso", "score1": 76, "seed2": 9, "team2": "Valparaiso", "score2": 75, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 5, "team1": "Valparaiso", "score1": 80, "seed2": 12, "team2": "Valparaiso", "score2": 79, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 4, "team1": "Valparaiso", "score1": 79, "seed2": 13, "team2": "Valparaiso", "score2": 76, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 6, "team1": "Valparaiso", "score1": 77, "seed2": 11, "team2": "Valparaiso", "score2": 73, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 3, "team1": "Florida", "score1": 81, "seed2": 14, "team2": "Valparaiso", "score2": 77, "winner": "Florida"},
+      {"region": "West", "seed1": 7, "team1": "Valparaiso", "score1": 76, "seed2": 10, "team2": "Valparaiso", "score2": 68, "winner": "Valparaiso"},
+      {"region": "West", "seed1": 2, "team1": "Valparaiso", "score1": 81, "seed2": 15, "team2": "Valparaiso", "score2": 72, "winner": "Valparaiso"}
+    ],
+    "round2": [
+      {"region": "East", "team1": "UConn", "seed1": 1, "score1": 90, "team2": "Valparaiso", "seed2": 8, "score2": 85, "winner": "UConn"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 5, "score1": 75, "team2": "Valparaiso", "seed2": 4, "score2": 74, "winner": "Valparaiso"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 3, "score1": 79, "team2": "Valparaiso", "seed2": 6, "score2": 77, "winner": "Valparaiso"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 2, "score1": 82, "team2": "Valparaiso", "seed2": 7, "score2": 73, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 1, "score1": 87, "team2": "Valparaiso", "seed2": 8, "score2": 81, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 5, "score1": 76, "team2": "Valparaiso", "seed2": 4, "score2": 76, "winner": "Kentucky"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 3, "score1": 81, "team2": "Valparaiso", "seed2": 6, "score2": 79, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Kentucky", "seed1": 2, "score1": 83, "team2": "Valparaiso", "seed2": 7, "score2": 75, "winner": "Kentucky"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 1, "score1": 86, "team2": "Valparaiso", "seed2": 8, "score2": 80, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 5, "score1": 77, "team2": "Valparaiso", "seed2": 4, "score2": 77, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 3, "score1": 80, "team2": "Valparaiso", "seed2": 6, "score2": 79, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Wisconsin", "seed1": 2, "score1": 84, "team2": "Valparaiso", "seed2": 7, "score2": 77, "winner": "Wisconsin"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 1, "score1": 84, "team2": "Valparaiso", "seed2": 8, "score2": 79, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 5, "score1": 78, "team2": "Valparaiso", "seed2": 4, "score2": 78, "winner": "Valparaiso"},
+      {"region": "West", "team1": "Florida", "seed1": 3, "score1": 82, "team2": "Valparaiso", "seed2": 6, "score2": 81, "winner": "Florida"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 2, "score1": 80, "team2": "Valparaiso", "seed2": 7, "score2": 73, "winner": "Valparaiso"}
+    ],
+    "sweet16": [
+      {"region": "East", "team1": "UConn", "seed1": 1, "score1": 86, "team2": "Valparaiso", "seed2": 5, "score2": 78, "winner": "UConn"},
+      {"region": "East", "team1": "Valparaiso", "seed1": 3, "score1": 75, "team2": "Valparaiso", "seed2": 2, "score2": 74, "winner": "Valparaiso"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 1, "score1": 87, "team2": "Kentucky", "seed2": 2, "score2": 85, "winner": "Kentucky"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 3, "score1": 78, "team2": "Valparaiso", "seed2": 2, "score2": 75, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 1, "score1": 85, "team2": "Valparaiso", "seed2": 5, "score2": 78, "winner": "Valparaiso"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 3, "score1": 80, "team2": "Wisconsin", "seed2": 2, "score2": 82, "winner": "Wisconsin"},
+      {"region": "West", "team1": "Valparaiso", "seed1": 1, "score1": 84, "team2": "Valparaiso", "seed2": 5, "score2": 82, "winner": "Florida"},
+      {"region": "West", "team1": "Florida", "seed1": 3, "score1": 79, "team2": "Valparaiso", "seed2": 2, "score2": 77, "winner": "Florida"}
+    ],
+    "elite8": [
+      {"region": "East", "team1": "UConn", "seed1": 1, "score1": 82, "team2": "Valparaiso", "seed2": 3, "score2": 76, "winner": "UConn"},
+      {"region": "South", "team1": "Valparaiso", "seed1": 1, "score1": 79, "team2": "Kentucky", "seed2": 2, "score2": 80, "winner": "Kentucky"},
+      {"region": "Midwest", "team1": "Valparaiso", "seed1": 1, "score1": 81, "team2": "Wisconsin", "seed2": 2, "score2": 85, "winner": "Wisconsin"},
+      {"region": "West", "team1": "Florida", "seed1": 3, "score1": 78, "team2": "Florida", "seed2": 3, "score2": 76, "winner": "Florida"}
+    ],
+    "finalFour": [
+      {"team1": "UConn", "seed1": 1, "score1": 60, "team2": "Kentucky", "seed2": 2, "score2": 55, "winner": "UConn"},
+      {"team1": "Wisconsin", "seed1": 2, "score1": 81, "team2": "Florida", "seed2": 3, "score2": 75, "winner": "Florida"}
+    ],
+    "championship": {
+      "team1": "UConn",
+      "seed1": 1,
+      "score1": 64,
+      "team2": "Florida",
+      "seed2": 3,
+      "score2": 52,
+      "winner": "UConn"
+    }
+  }
+}
