@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>March Madness Archive</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --surface: rgba(15, 23, 42, 0.82);
+      --surface-light: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --border: rgba(148, 163, 184, 0.25);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), transparent 45%), radial-gradient(circle at bottom, rgba(59, 130, 246, 0.18), transparent 55%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 16px;
+    }
+
+    .app {
+      width: min(1100px, 100%);
+      min-height: 100vh;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(26px);
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-top: calc(88px + env(safe-area-inset-top));
+      margin-bottom: 24px;
+    }
+
+    header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2vw + 1rem, 2rem);
+      letter-spacing: 0.01em;
+    }
+
+    header span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .tab-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: clamp(16px, 2vw + 8px, 28px);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-bar {
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.98);
+      padding: calc(12px + env(safe-area-inset-top)) 18px 12px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: rgba(226, 232, 240, 0.82);
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .tab-btn svg {
+      width: 22px;
+      height: 22px;
+      opacity: 0.85;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .tab-btn:not(.active) {
+      color: rgba(203, 213, 225, 0.78);
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: clamp(16px, 1.5vw + 10px, 24px);
+      margin-bottom: 18px;
+    }
+
+    .panel-card h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    select, button.primary {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border 0.2s ease, transform 0.15s ease;
+    }
+
+    select:focus, button.primary:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.8), rgba(59, 130, 246, 0.8));
+      border: none;
+    }
+
+    button.primary:active {
+      transform: translateY(1px);
+    }
+
+    .bracket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      width: 100%;
+    }
+
+    .round-column h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .game-card {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
+    }
+
+    .game-card:active {
+      transform: scale(0.98);
+    }
+
+    .game-card.highlight {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+    }
+
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .team-row.winner {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .team-meta {
+      display: flex;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stat-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .stat-table th, .stat-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .stat-table th.sortable {
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      color: var(--muted);
+    }
+
+    .stat-table th.sortable::after {
+      content: '\2195';
+      font-size: 0.75rem;
+      position: absolute;
+      right: 8px;
+      opacity: 0.35;
+    }
+
+    .stat-table th.sortable.active-asc::after {
+      content: '\2191';
+      opacity: 0.8;
+    }
+
+    .stat-table th.sortable.active-desc::after {
+      content: '\2193';
+      opacity: 0.8;
+    }
+
+    .stat-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .clickable-row {
+      cursor: pointer;
+    }
+
+    .subtab-bar {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 8px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .subtab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 500;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .subtab-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .subtab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .subtab-panel.active {
+      display: block;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+
+    .empty-state {
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148, 163, 184, 0.3);
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .seed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .seed-card {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .seed-card h4 {
+      margin: 0 0 10px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sim-output {
+      margin-top: 16px;
+    }
+
+    .loading {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .loading span {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid rgba(56, 189, 248, 0.35);
+      border-top-color: var(--accent);
+      animation: spin 0.9s linear infinite;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      z-index: 200;
+    }
+
+    .modal-overlay[hidden] {
+      display: none;
+    }
+
+    .modal-content {
+      width: min(540px, 100%);
+      max-height: 80vh;
+      overflow-y: auto;
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.45);
+      padding: 24px;
+      color: var(--text);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--accent);
+    }
+
+    .game-history-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .game-history-item {
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .game-history-item strong {
+      color: var(--accent);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 8px;
+      }
+
+      header {
+        padding: 20px;
+      }
+
+      .tab-panel {
+        padding: 18px;
+      }
+
+      .game-card {
+        padding: 10px;
+      }
+
+      .modal-content {
+        max-height: 88vh;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .bracket-grid {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        gap: 16px;
+        scroll-snap-type: x proximity;
+      }
+
+      .bracket-grid::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .bracket-grid::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.35);
+        border-radius: 999px;
+      }
+
+      .round-column {
+        flex: 0 0 230px;
+        scroll-snap-align: start;
+      }
+
+      .round-column h3 {
+        position: sticky;
+        top: 0;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 8px 0;
+        margin-bottom: 12px;
+        z-index: 5;
+      }
+
+      .tab-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="application">
+    <header>
+      <div>
+        <h1>March Madness Archive</h1>
+        <span>Historical brackets, insights, simulations</span>
+      </div>
+      <div class="pill-group"></div>
+    </header>
+
+    <main>
+      <section id="tab-brackets" class="tab-panel active" aria-labelledby="nav-brackets">
+        <div class="panel-card">
+          <h2>Replay a Tournament</h2>
+          <div class="control-row">
+            <label for="yearSelect">Tournament year</label>
+            <select id="yearSelect" aria-label="Select tournament year"></select>
+          </div>
+          <div id="bracketSummary" class="muted"></div>
+        </div>
+
+        <div class="panel-card">
+          <h2>Complete Bracket</h2>
+          <div id="bracketView" class="bracket-grid"></div>
+          <div class="muted" style="margin-top:12px;">Tip: swipe horizontally to move between rounds on touch devices.</div>
+        </div>
+      </section>
+
+      <section id="tab-insights" class="tab-panel" aria-labelledby="nav-insights">
+        <div class="panel-card">
+          <h2>Analytics Lab</h2>
+          <div class="subtab-bar" role="tablist">
+            <button class="subtab-btn active" data-subtab="team-history" aria-selected="true">Team history</button>
+            <button class="subtab-btn" data-subtab="seed-rounds" aria-selected="false">Seeds by round</button>
+            <button class="subtab-btn" data-subtab="seed-matchups" aria-selected="false">Seed matchups</button>
+          </div>
+
+          <div id="subtab-team-history" class="subtab-panel active" role="tabpanel">
+            <div class="muted" id="teamHistorySummary"></div>
+            <div style="overflow-x:auto; margin-top:16px;">
+              <table class="stat-table" aria-describedby="teamHistorySummary" data-team-table="true">
+                <thead>
+                  <tr>
+                    <th scope="col" class="sortable" data-sort="team">Team</th>
+                    <th scope="col" class="sortable" data-sort="titles">Titles</th>
+                    <th scope="col" class="sortable" data-sort="runnerUp">Runner-up</th>
+                    <th scope="col" class="sortable" data-sort="finalFour">Final Four</th>
+                    <th scope="col" class="sortable" data-sort="wins">Wins</th>
+                    <th scope="col" class="sortable" data-sort="losses">Losses</th>
+                    <th scope="col" class="sortable" data-sort="winPct">Win%</th>
+                  </tr>
+                </thead>
+                <tbody id="teamHistoryTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="subtab-seed-rounds" class="subtab-panel" role="tabpanel">
+            <div class="muted" style="margin-bottom:12px;">Win share by seed and round across the archive.</div>
+            <div id="seedRoundGrid" class="seed-grid"></div>
+          </div>
+
+          <div id="subtab-seed-matchups" class="subtab-panel" role="tabpanel">
+            <div class="muted" style="margin-bottom:12px;">Historical head-to-head records between seeds.</div>
+            <div style="overflow-x:auto;">
+              <table class="stat-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Matchup</th>
+                    <th scope="col">Games</th>
+                    <th scope="col">Lower seed win%</th>
+                    <th scope="col">Higher seed win%</th>
+                  </tr>
+                </thead>
+                <tbody id="seedMatchupTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-sim" class="tab-panel" aria-labelledby="nav-sim">
+        <div class="panel-card">
+          <h2>Simulate a Tournament</h2>
+          <div class="control-row">
+            <label for="simYearSelect">Bracket year</label>
+            <select id="simYearSelect" aria-label="Select a bracket for simulation"></select>
+            <label for="simModeSelect">Simulation mode</label>
+            <select id="simModeSelect" aria-label="Select simulation mode">
+              <option value="seed-record">Seed record</option>
+              <option value="random">Pure random</option>
+              <option value="legacy">Legacy wins</option>
+              <option value="team-win-pct">Team win %</option>
+              <option value="team-total-wins">Total wins</option>
+              <option value="team-titles">Championship count</option>
+              <option value="seed-weighted">Seed weighted</option>
+            </select>
+            <button class="primary" id="simulateBtn">Run simulation</button>
+          </div>
+          <div class="muted">Seed record uses matchup history; legacy favors decorated programs. Team win%, total wins, championship count, and seed weighting offer alternate projection styles.</div>
+          
+          <div style="margin-top:20px;">
+            <details>
+              <summary style="cursor:pointer; color:var(--accent); font-weight:500; margin-bottom:10px;">Custom Team Field (Optional)</summary>
+              <div class="panel-card" style="margin-top:10px; border-style:dashed;">
+                <p class="muted" style="margin-bottom:10px;">Paste 64 teams (one per line) or use dummy names. If empty, the selected bracket year is used.</p>
+                <textarea id="customTeams" placeholder="Kentucky&#10;Duke&#10;..." style="width:100%; height:120px; background:rgba(15,23,42,0.6); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:12px; font-family:inherit;"></textarea>
+                <div style="margin-top:10px; display: flex; gap: 8px;">
+                  <button class="primary" id="fillDummyBtn" style="background:var(--surface-light);">Fill dummy teams</button>
+                  <button class="primary" id="clearCustomBtn" style="background:var(--surface-light);">Clear</button>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div class="sim-output">
+            <div id="simStats" class="tag-pill" style="margin-bottom:12px; display:none;"></div>
+            <div id="simSummary" class="muted"></div>
+            <div id="simBracket" class="bracket-grid" style="margin-top:18px;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tab-bar" role="tablist">
+      <button class="tab-btn active" id="nav-brackets" data-tab="brackets" aria-controls="tab-brackets" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/>
+        </svg>
+        Brackets
+      </button>
+      <button class="tab-btn" id="nav-insights" data-tab="insights" aria-controls="tab-insights" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18"/><path d="M3 17l4-4 4 4 8-8 2 2"/>
+        </svg>
+        Insights
+      </button>
+      <button class="tab-btn" id="nav-sim" data-tab="sim" aria-controls="tab-sim" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        Sim
+      </button>
+    </nav>
+  </div>
+
+    <div id="teamModal" class="modal-overlay" hidden>
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle">
+        <div class="modal-header">
+          <div>
+            <h3 id="teamModalTitle"></h3>
+            <div id="teamModalSubtitle" class="muted"></div>
+          </div>
+          <button class="modal-close" id="teamModalClose" aria-label="Close team history dialog">&times;</button>
+        </div>
+        <div id="teamModalBody">
+          <ul id="teamModalList" class="game-history-list"></ul>
+        </div>
+      </div>
+    </div>
+
+  <template id="loadingTemplate">
+    <div class="loading" role="status">
+      <span aria-hidden="true"></span>
+      <strong>Loading tournaments…</strong>
+    </div>
+  </template>
+
+  <script>
+    const YEAR_START = 1985;
+    const YEAR_END = 2025;
+    const ROUND_SEQUENCE = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour', 'championship'];
+
+    const state = {
+      tournaments: new Map(),
+      aggregated: null,
+      currentYear: null,
+      loaded: false,
+      teamSort: { key: 'titles', direction: 'desc' },
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      setupSubtabs();
+      setupTeamTableInteractions();
+      setupModalControls();
+      bootstrap();
+    });
+
+    async function bootstrap() {
+      renderLoading();
+      await loadAllTournaments();
+      populateYearSelectors();
+      computeAggregatedStats();
+      hydrateInsights();
+      state.loaded = true;
+      const defaultYear = state.tournaments.size ? Math.max(...state.tournaments.keys()) : YEAR_END;
+      setActiveYear(defaultYear);
+    }
+
+    function setupTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('active')) return;
+          document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.toggle('active', b === btn);
+            b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+          });
+          document.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.toggle('active', panel.id === `tab-${btn.dataset.tab}`);
+          });
+        });
+      });
+    }
+
+    function setupSubtabs() {
+      document.querySelectorAll('.subtab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.subtab;
+          document.querySelectorAll('.subtab-btn').forEach(b => {
+            const isActive = b === btn;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+          document.querySelectorAll('.subtab-panel').forEach(panel => {
+            panel.classList.toggle('active', panel.id === `subtab-${target}`);
+          });
+        });
+      });
+    }
+
+    function renderLoading() {
+      const bracketView = document.getElementById('bracketView');
+      const simBracket = document.getElementById('simBracket');
+      const template = document.getElementById('loadingTemplate');
+      bracketView.replaceChildren(template.content.cloneNode(true));
+      simBracket.replaceChildren(template.content.cloneNode(true));
+    }
+
+    async function loadAllTournaments() {
+      const fetches = [];
+      for (let year = YEAR_START; year <= YEAR_END; year++) {
+        if (year === 2020) {
+          console.info('Skipping 2020 tournament data (season canceled).');
+          continue;
+        }
+        const url = `json/tournament-${year}.json`;
+        fetches.push(fetch(url)
+          .then(resp => {
+            if (!resp.ok) throw new Error(`Missing dataset ${year}`);
+            return resp.json().then(data => state.tournaments.set(year, data));
+          })
+          .catch(() => {
+            console.warn(`Tournament data not found for ${year}, skipping.`);
+          }));
+      }
+      await Promise.all(fetches);
+    }
+
+    function populateYearSelectors() {
+      const yearOptions = Array.from(state.tournaments.keys()).sort((a, b) => b - a);
+      const yearSelect = document.getElementById('yearSelect');
+      const simYearSelect = document.getElementById('simYearSelect');
+      yearOptions.forEach(year => {
+        const option = new Option(year, year);
+        yearSelect.add(option.cloneNode(true));
+        simYearSelect.add(option);
+      });
+      yearSelect.addEventListener('change', event => setActiveYear(Number(event.target.value)));
+      document.getElementById('simulateBtn').addEventListener('click', () => runSimulation());
+      document.getElementById('fillDummyBtn').addEventListener('click', () => fillDummyTeams());
+      document.getElementById('clearCustomBtn').addEventListener('click', () => {
+        document.getElementById('customTeams').value = '';
+      });
+    }
+
+    function fillDummyTeams() {
+      const dummies = Array.from({ length: 64 }, (_, i) => `Team ${i + 1}`);
+      document.getElementById('customTeams').value = dummies.join('\n');
+    }
+
+    function setActiveYear(year) {
+      if (!state.tournaments.has(year)) return;
+      state.currentYear = year;
+      document.getElementById('yearSelect').value = year;
+      document.getElementById('simYearSelect').value = year;
+      renderBracket(year);
+      renderBracketSummary(year);
+    }
+
+    function renderBracket(year) {
+      const data = state.tournaments.get(year);
+      const roundOrder = [
+        { key: 'round1', label: 'Round of 64' },
+        { key: 'round2', label: 'Round of 32' },
+        { key: 'sweet16', label: 'Sweet 16' },
+        { key: 'elite8', label: 'Elite Eight' },
+        { key: 'finalFour', label: 'Final Four' },
+        { key: 'championship', label: 'Title Game' },
+      ];
+      const container = document.getElementById('bracketView');
+      container.innerHTML = '';
+      roundOrder.forEach(round => {
+        const column = document.createElement('div');
+        column.className = 'round-column';
+        const header = document.createElement('h3');
+        header.textContent = round.label;
+        column.appendChild(header);
+        if (round.key === 'championship') {
+          column.appendChild(renderChampionshipCard(data.rounds.championship));
+        } else {
+          const games = data.rounds[round.key] || [];
+          games.forEach(game => column.appendChild(renderGameCard(game, round.key === 'finalFour')));
+        }
+        container.appendChild(column);
+      });
+    }
+
+    function renderGameCard(game, highlight = false) {
+      const card = document.createElement('article');
+      card.className = 'game-card';
+      if (highlight) card.classList.add('highlight');
+      const winnerSeed = resolveWinnerSeed(game);
+      const teams = [
+        { team: game.team1, seed: game.seed1, score: game.score1 },
+        { team: game.team2, seed: game.seed2, score: game.score2 },
+      ];
+      teams.forEach(entry => {
+        const row = document.createElement('div');
+        row.className = 'team-row';
+        const isWinner = entry.team === game.winner;
+        if (isWinner) row.classList.add('winner');
+        row.innerHTML = `<span>${entry.seed ?? '?'} • ${entry.team || 'TBD'}</span><span>${entry.score ?? ''}</span>`;
+        card.appendChild(row);
+      });
+      const meta = document.createElement('div');
+      meta.className = 'team-meta';
+      meta.innerHTML = [`Winner: ${game.winner || 'TBD'}`, winnerSeed ? `Seed ${winnerSeed}` : '', game.region ? `${game.region} region` : ''].filter(Boolean).join(' · ');
+      card.appendChild(meta);
+      return card;
+    }
+
+    function renderChampionshipCard(final) {
+      if (!final) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'Championship data unavailable for this season.';
+        return empty;
+      }
+      const card = document.createElement('article');
+      card.className = 'game-card highlight';
+      const teams = [
+        { team: final.team1, seed: final.seed1, score: final.score1 },
+        { team: final.team2, seed: final.seed2, score: final.score2 },
+      ];
+      teams.forEach(entry => {
+        const row = document.createElement('div');
+        row.className = 'team-row';
+        if (entry.team === final.winner) row.classList.add('winner');
+        row.innerHTML = `<span>${entry.seed ?? '?'} • ${entry.team}</span><span>${entry.score ?? ''}</span>`;
+        card.appendChild(row);
+      });
+      const meta = document.createElement('div');
+      meta.className = 'team-meta';
+      const championSeed = resolveWinnerSeed(final);
+      meta.innerHTML = [`Champion: ${final.winner}`, championSeed ? `Seed ${championSeed}` : ''].filter(Boolean).join(' · ');
+      card.appendChild(meta);
+      return card;
+    }
+
+    function renderBracketSummary(year) {
+      const data = state.tournaments.get(year);
+      const summary = document.getElementById('bracketSummary');
+      summary.innerHTML = `Champion ${data.champion} (Seed ${data.championSeed}) over ${data.runnerUp} (Seed ${data.runnerUpSeed}). Final Four: ${data.finalFour.map(team => `${team.team} (${team.seed})`).join(', ')}.`;
+    }
+
+    function resolveWinnerSeed(game) {
+      if (!game || !game.winner) return null;
+      if (game.winner === game.team1) return game.seed1 ?? null;
+      if (game.winner === game.team2) return game.seed2 ?? null;
+      return null;
+    }
+
+    function computeAggregatedStats() {
+      const teamMap = new Map();
+      const seedRoundMap = new Map();
+      const matchupMap = new Map();
+      const roundKeys = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour'];
+
+      const tournaments = Array.from(state.tournaments.values());
+      tournaments.forEach(tournament => {
+        const championStats = ensureTeam(teamMap, tournament.champion);
+        if (championStats) championStats.titles += 1;
+        const runnerStats = ensureTeam(teamMap, tournament.runnerUp);
+        if (runnerStats) runnerStats.runnerUp += 1;
+        (tournament.finalFour || []).forEach(entry => {
+          const teamStats = ensureTeam(teamMap, entry.team);
+          if (teamStats) teamStats.finalFour += 1;
+        });
+
+        roundKeys.forEach(roundKey => {
+          const playedThisRound = new Set();
+          (tournament.rounds[roundKey] || []).forEach(game => {
+            // Check for placeholder/duplicate teams in the same round
+            if (playedThisRound.has(game.team1) || playedThisRound.has(game.team2)) {
+              return; // Skip duplicate matchups in same round (placeholder data)
+            }
+            if (!game.team1 || !game.team2 || game.team1 === game.team2) return;
+            
+            playedThisRound.add(game.team1);
+            playedThisRound.add(game.team2);
+            
+            registerRoundGame(seedRoundMap, teamMap, roundKey, game, tournament.year);
+            registerMatchup(matchupMap, game);
+          });
+        });
+        
+        const final = tournament.rounds.championship;
+        if (final && final.team1 && final.team2 && final.team1 !== final.team2) {
+          registerChampionship(seedRoundMap, matchupMap, teamMap, final, tournament.year);
+        }
+      });
+
+      state.aggregated = {
+        teamHistory: teamMap,
+        seedRounds: seedRoundMap,
+        matchups: matchupMap,
+        totalSeasons: tournaments.length,
+      };
+    }
+
+    function ensureTeam(map, teamName) {
+      if (!teamName) return null;
+      if (!map.has(teamName)) {
+        map.set(teamName, { titles: 0, runnerUp: 0, finalFour: 0, wins: 0, losses: 0, games: [] });
+      }
+      return map.get(teamName);
+    }
+
+    function registerRoundGame(seedRoundMap, teamMap, roundKey, game, year) {
+      if (!game) return;
+      updateSeedRound(seedRoundMap, roundKey, game.seed1, game.winner === game.team1);
+      updateSeedRound(seedRoundMap, roundKey, game.seed2, game.winner === game.team2);
+      recordTeamResult(teamMap, year, roundKey, game);
+    }
+
+    function registerChampionship(seedRoundMap, matchupMap, teamMap, final, year) {
+      if (!final) return;
+      registerRoundGame(seedRoundMap, teamMap, 'championship', {
+        team1: final.team1,
+        seed1: final.seed1,
+        team2: final.team2,
+        seed2: final.seed2,
+        winner: final.winner,
+        score1: final.score1,
+        score2: final.score2,
+      }, year);
+      registerMatchup(matchupMap, {
+        seed1: final.seed1,
+        seed2: final.seed2,
+        team1: final.team1,
+        team2: final.team2,
+        winner: final.winner,
+      });
+    }
+
+    function recordTeamResult(teamMap, year, roundKey, game) {
+      const { team1, team2, winner, seed1, seed2, score1, score2 } = game;
+      if (!team1 || !team2 || team1 === team2) return;
+      const stats1 = ensureTeam(teamMap, team1);
+      const stats2 = ensureTeam(teamMap, team2);
+      if (!stats1 || !stats2) return;
+      const roundLabel = friendlyRound(roundKey);
+      const team1Win = winner === team1;
+      const team2Win = winner === team2;
+      if (team1Win) {
+        stats1.wins += 1;
+        stats2.losses += 1;
+      } else if (team2Win) {
+        stats2.wins += 1;
+        stats1.losses += 1;
+      }
+
+      stats1.games.push({
+        year,
+        roundKey,
+        round: roundLabel,
+        opponent: team2,
+        teamSeed: seed1 ?? null,
+        opponentSeed: seed2 ?? null,
+        result: team1Win ? 'W' : 'L',
+        teamScore: typeof score1 === 'number' ? score1 : null,
+        opponentScore: typeof score2 === 'number' ? score2 : null,
+      });
+
+      stats2.games.push({
+        year,
+        roundKey,
+        round: roundLabel,
+        opponent: team1,
+        teamSeed: seed2 ?? null,
+        opponentSeed: seed1 ?? null,
+        result: team2Win ? 'W' : 'L',
+        teamScore: typeof score2 === 'number' ? score2 : null,
+        opponentScore: typeof score1 === 'number' ? score1 : null,
+      });
+    }
+
+    function updateSeedRound(seedRoundMap, roundKey, seed, isWinner) {
+      if (typeof seed !== 'number') return;
+      if (!seedRoundMap.has(roundKey)) seedRoundMap.set(roundKey, new Map());
+      const roundMap = seedRoundMap.get(roundKey);
+      if (!roundMap.has(seed)) roundMap.set(seed, { games: 0, wins: 0 });
+      const entry = roundMap.get(seed);
+      entry.games += 1;
+      if (isWinner) entry.wins += 1;
+    }
+
+    function registerMatchup(matchupMap, game) {
+      if (typeof game.seed1 !== 'number' || typeof game.seed2 !== 'number') return;
+      const lowerSeed = Math.min(game.seed1, game.seed2);
+      const higherSeed = Math.max(game.seed1, game.seed2);
+      const key = `${lowerSeed}-${higherSeed}`;
+      if (!matchupMap.has(key)) {
+        matchupMap.set(key, { lowerSeed, higherSeed, games: 0, lowerWins: 0, higherWins: 0 });
+      }
+      const entry = matchupMap.get(key);
+      entry.games += 1;
+      if (resolveWinnerSeed(game) === lowerSeed) {
+        entry.lowerWins += 1;
+      } else {
+        entry.higherWins += 1;
+      }
+    }
+
+    function hydrateInsights() {
+      if (!state.aggregated) return;
+      renderTeamHistory();
+      renderSeedRounds();
+      renderSeedMatchups();
+    }
+
+    function renderTeamHistory() {
+      const { teamHistory } = state.aggregated;
+      const rows = Array.from(teamHistory.entries()).map(([team, stats]) => {
+        const totalGames = stats.wins + stats.losses;
+        const winPctValue = totalGames ? stats.wins / totalGames : 0;
+        return {
+          team,
+          titles: stats.titles,
+          runnerUp: stats.runnerUp,
+          finalFour: stats.finalFour,
+          wins: stats.wins,
+          losses: stats.losses,
+          winPct: winPctValue,
+        };
+      });
+
+      const direction = state.teamSort.direction === 'asc' ? 1 : -1;
+      rows.sort((a, b) => {
+        const key = state.teamSort.key;
+        if (key === 'team') {
+          return a.team.localeCompare(b.team) * direction;
+        }
+        const valA = a[key] ?? 0;
+        const valB = b[key] ?? 0;
+        if (valA === valB) {
+          return a.team.localeCompare(b.team) * direction;
+        }
+        return (valA > valB ? 1 : -1) * direction;
+      });
+
+      const tbody = document.getElementById('teamHistoryTable');
+      tbody.innerHTML = '';
+      rows.forEach(entry => {
+        const row = document.createElement('tr');
+        const totalGames = entry.wins + entry.losses;
+        const winPct = totalGames ? (entry.winPct * 100).toFixed(1) : '0.0';
+        row.dataset.team = entry.team;
+        row.classList.add('clickable-row');
+        row.innerHTML = `
+          <td>${entry.team}</td>
+          <td>${entry.titles}</td>
+          <td>${entry.runnerUp}</td>
+          <td>${entry.finalFour}</td>
+          <td>${entry.wins}</td>
+          <td>${entry.losses}</td>
+          <td>${winPct}%</td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById('teamHistorySummary').textContent = `${teamHistory.size} programs recorded wins since ${YEAR_START}. Tap headers to sort or click a team for full game history.`;
+      updateTeamSortIndicators();
+    }
+
+    function renderSeedRounds() {
+      const container = document.getElementById('seedRoundGrid');
+      container.innerHTML = '';
+      const order = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour', 'championship'];
+      const labels = {
+        round1: 'Round of 64',
+        round2: 'Round of 32',
+        sweet16: 'Sweet 16',
+        elite8: 'Elite Eight',
+        finalFour: 'Final Four',
+        championship: 'Championship',
+      };
+      order.forEach(roundKey => {
+        const roundMap = state.aggregated.seedRounds.get(roundKey);
+        if (!roundMap) return;
+        const card = document.createElement('section');
+        card.className = 'seed-card';
+        const heading = document.createElement('h4');
+        heading.textContent = labels[roundKey];
+        card.appendChild(heading);
+        const list = document.createElement('div');
+        list.className = 'muted';
+        list.style.display = 'grid';
+        list.style.gridTemplateColumns = 'repeat(auto-fit, minmax(120px, 1fr))';
+        list.style.gap = '6px 12px';
+        const seeds = Array.from(roundMap.entries()).sort((a, b) => a[0] - b[0]);
+        seeds.forEach(([seed, record]) => {
+          const winRate = record.games ? ((record.wins / record.games) * 100).toFixed(1) : '0.0';
+          const entry = document.createElement('div');
+          entry.textContent = `Seed ${seed}: ${winRate}% (${record.wins}/${record.games})`;
+          list.appendChild(entry);
+        });
+        card.appendChild(list);
+        container.appendChild(card);
+      });
+    }
+
+    function renderSeedMatchups() {
+      const table = document.getElementById('seedMatchupTable');
+      table.innerHTML = '';
+      const records = Array.from(state.aggregated.matchups.values())
+        .filter(entry => entry.games >= 2)
+        .sort((a, b) => b.games - a.games);
+      records.forEach(entry => {
+        const row = document.createElement('tr');
+        const lowerRate = entry.games ? ((entry.lowerWins / entry.games) * 100).toFixed(1) : '0.0';
+        const higherRate = entry.games ? ((entry.higherWins / entry.games) * 100).toFixed(1) : '0.0';
+        row.innerHTML = `
+          <td>${entry.lowerSeed} vs ${entry.higherSeed}</td>
+          <td>${entry.games}</td>
+          <td>${lowerRate}%</td>
+          <td>${higherRate}%</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
+    function setupTeamTableInteractions() {
+      const table = document.querySelector('[data-team-table]');
+      if (!table || table.dataset.enhanced) return;
+      table.dataset.enhanced = 'true';
+      const thead = table.querySelector('thead');
+      const tbody = table.querySelector('tbody');
+      if (thead) {
+        thead.addEventListener('click', event => {
+          const target = event.target.closest('[data-sort]');
+          if (!target) return;
+          const sortKey = target.dataset.sort;
+          if (!sortKey) return;
+          if (state.teamSort.key === sortKey) {
+            state.teamSort.direction = state.teamSort.direction === 'asc' ? 'desc' : 'asc';
+          } else {
+            state.teamSort.key = sortKey;
+            state.teamSort.direction = sortKey === 'team' ? 'asc' : 'desc';
+          }
+          if (state.aggregated) renderTeamHistory();
+        });
+      }
+      if (tbody) {
+        tbody.addEventListener('click', event => {
+          const row = event.target.closest('tr[data-team]');
+          if (!row) return;
+          openTeamModal(row.dataset.team);
+        });
+      }
+    }
+
+    function updateTeamSortIndicators() {
+      document.querySelectorAll('[data-sort]').forEach(th => {
+        th.classList.remove('active-asc', 'active-desc');
+        if (th.dataset.sort === state.teamSort.key) {
+          th.classList.add(state.teamSort.direction === 'asc' ? 'active-asc' : 'active-desc');
+        }
+      });
+    }
+
+    function setupModalControls() {
+      const overlay = document.getElementById('teamModal');
+      if (!overlay || overlay.dataset.enhanced) return;
+      overlay.dataset.enhanced = 'true';
+      const closeBtn = document.getElementById('teamModalClose');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeTeamModal);
+      }
+      overlay.addEventListener('click', event => {
+        if (event.target === overlay) closeTeamModal();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !overlay.hasAttribute('hidden')) {
+          closeTeamModal();
+        }
+      });
+    }
+
+    function openTeamModal(teamName) {
+      if (!teamName || !state.aggregated) return;
+      const overlay = document.getElementById('teamModal');
+      if (!overlay) return;
+      const stats = state.aggregated.teamHistory.get(teamName);
+      if (!stats) return;
+      const title = document.getElementById('teamModalTitle');
+      const subtitle = document.getElementById('teamModalSubtitle');
+      const list = document.getElementById('teamModalList');
+      if (title) title.textContent = teamName;
+      const totalGames = stats.wins + stats.losses;
+      const winPct = totalGames ? ((stats.wins / totalGames) * 100).toFixed(1) : '0.0';
+      if (subtitle) subtitle.textContent = `${stats.wins}-${stats.losses} (${winPct}%) since ${YEAR_START}`;
+      if (list) {
+        list.innerHTML = '';
+        const history = stats.games.slice().sort((a, b) => {
+          if (a.year !== b.year) return b.year - a.year;
+          const indexA = ROUND_SEQUENCE.indexOf(a.roundKey);
+          const indexB = ROUND_SEQUENCE.indexOf(b.roundKey);
+          const safeA = indexA === -1 ? ROUND_SEQUENCE.length : indexA;
+          const safeB = indexB === -1 ? ROUND_SEQUENCE.length : indexB;
+          if (safeA === safeB) {
+            return a.opponent.localeCompare(b.opponent);
+          }
+          return safeA - safeB;
+        });
+        if (!history.length) {
+          const empty = document.createElement('li');
+          empty.className = 'game-history-item';
+          empty.textContent = 'No recorded games for this program.';
+          list.appendChild(empty);
+        } else {
+          history.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'game-history-item';
+            const resultLabel = item.result === 'W' ? 'Win' : 'Loss';
+            const seeds = [
+              typeof item.teamSeed === 'number' ? `Seed ${item.teamSeed}` : null,
+              typeof item.opponentSeed === 'number' ? `vs Seed ${item.opponentSeed}` : null,
+            ].filter(Boolean).join(' · ');
+            const scoreLine = (item.teamScore !== null && item.opponentScore !== null)
+              ? `${item.teamScore}-${item.opponentScore}`
+              : null;
+            li.innerHTML = `
+              <strong>${item.year} · ${item.round}</strong>
+              <div>${resultLabel} vs ${item.opponent}${seeds ? ` · ${seeds}` : ''}</div>
+              ${scoreLine ? `<div>Score: ${scoreLine}</div>` : ''}
+            `;
+            list.appendChild(li);
+          });
+        }
+      }
+      overlay.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTeamModal() {
+      const overlay = document.getElementById('teamModal');
+      if (!overlay || overlay.hasAttribute('hidden')) return;
+      overlay.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+
+    function runSimulation() {
+      if (!state.loaded || !state.aggregated) {
+        alert('Datasets still loading. Try again in a moment.');
+        return;
+      }
+      const yearSelect = document.getElementById('simYearSelect');
+      const year = Number(yearSelect.value);
+      const mode = document.getElementById('simModeSelect').value;
+      const customInput = document.getElementById('customTeams').value.trim();
+      
+      let baseRounds;
+      let usingCustom = false;
+
+      if (customInput) {
+        const teams = customInput.split('\n').map(t => t.trim()).filter(Boolean);
+        if (teams.length < 64) {
+          alert(`Please provide at least 64 teams (currently ${teams.length}).`);
+          return;
+        }
+        usingCustom = true;
+        baseRounds = { round1: buildCustomRound1(teams.slice(0, 64)) };
+      } else {
+        if (!state.tournaments.has(year)) return;
+        baseRounds = state.tournaments.get(year).rounds;
+      }
+
+      const bracket = simulateBracket(baseRounds, mode);
+      let accuracy = null;
+      if (!usingCustom && state.tournaments.has(year)) {
+        accuracy = calculateBracketAccuracy(bracket, state.tournaments.get(year).rounds);
+      }
+      
+      renderSimulation(bracket, mode, accuracy);
+    }
+
+    function buildCustomRound1(teams) {
+      const regions = ['East', 'West', 'Midwest', 'South'];
+      const round1 = [];
+      const seeds = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
+      
+      for (let r = 0; r < 4; r++) {
+        const region = regions[r];
+        for (let s = 0; s < 16; s += 2) {
+          const s1 = seeds[s];
+          const s2 = seeds[s+1];
+          const idx1 = r * 16 + s; // This is a simple linear map, logic can be tuned
+          const idx2 = r * 16 + s + 1;
+          round1.push({
+            region,
+            team1: teams[idx1] || `Team ${idx1+1}`, 
+            seed1: s1,
+            team2: teams[idx2] || `Team ${idx2+1}`, 
+            seed2: s2
+          });
+        }
+      }
+      return round1;
+    }
+
+    function calculateBracketAccuracy(simulated, actual) {
+      let matches = 0;
+      let totalGames = 0;
+      const keys = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour'];
+      
+      keys.forEach(k => {
+        if (!simulated[k] || !actual[k]) return;
+        simulated[k].forEach((game, i) => {
+          if (actual[k][i] && game.winner === actual[k][i].winner) {
+            matches++;
+          }
+          totalGames++;
+        });
+      });
+
+      if (simulated.championship && actual.championship) {
+        if (simulated.championship.winner === actual.championship.winner) {
+          matches++;
+        }
+        totalGames++;
+      }
+
+      return totalGames > 0 ? (matches / totalGames * 100).toFixed(1) : 0;
+    }
+
+    function simulateBracket(rounds, mode) {
+      const simulated = {};
+      const baseRound = Array.isArray(rounds.round1) ? rounds.round1.map(game => ({ ...game })) : [];
+      simulated.round1 = simulateRound(baseRound, mode);
+
+      let previousRound = simulated.round1;
+      ['round2', 'sweet16', 'elite8', 'finalFour'].forEach(key => {
+        const nextMatchups = buildNextRound(previousRound);
+        const simulatedRound = simulateRound(nextMatchups, mode);
+        simulated[key] = simulatedRound;
+        previousRound = simulatedRound;
+      });
+
+      simulated.championship = simulateChampionship(buildChampionship(simulated.finalFour), mode);
+      return simulated;
+    }
+
+    function simulateRound(matchups, mode) {
+      return matchups.map(game => ({
+        team1: game.team1,
+        team2: game.team2,
+        seed1: game.seed1,
+        seed2: game.seed2,
+        region: game.region ?? null,
+        winner: pickWinner(game, mode),
+      }));
+    }
+
+    function buildNextRound(previousRoundGames) {
+      const matchups = [];
+      for (let i = 0; i < previousRoundGames.length; i += 2) {
+        const gameA = previousRoundGames[i];
+        const gameB = previousRoundGames[i + 1];
+        if (!gameA || !gameB || !gameA.winner || !gameB.winner) continue;
+        matchups.push({
+          team1: gameA.winner,
+          seed1: resolveWinnerSeed(gameA),
+          team2: gameB.winner,
+          seed2: resolveWinnerSeed(gameB),
+          region: gameA.region === gameB.region ? gameA.region : gameA.region || gameB.region || null,
+        });
+      }
+      return matchups;
+    }
+
+    function buildChampionship(finalFourGames) {
+      if (!finalFourGames || finalFourGames.length < 2) return null;
+      const [eastWest, midSouth] = finalFourGames;
+      if (!eastWest?.winner || !midSouth?.winner) return null;
+      return {
+        team1: eastWest.winner,
+        seed1: resolveWinnerSeed(eastWest),
+        team2: midSouth.winner,
+        seed2: resolveWinnerSeed(midSouth),
+      };
+    }
+
+    function simulateChampionship(matchup, mode) {
+      if (!matchup) return null;
+      return {
+        ...matchup,
+        winner: pickWinner(matchup, mode),
+      };
+    }
+
+    function pickWinner(game, mode) {
+      const seed1 = game.seed1 ?? resolveSeedFromPreviousRound(game.team1);
+      const seed2 = game.seed2 ?? resolveSeedFromPreviousRound(game.team2);
+      const stats1 = state.aggregated?.teamHistory.get(game.team1);
+      const stats2 = state.aggregated?.teamHistory.get(game.team2);
+
+      switch (mode) {
+        case 'random':
+          return coinFlip(game.team1, game.team2);
+        case 'legacy': {
+          const score1 = legacyScore(game.team1);
+          const score2 = legacyScore(game.team2);
+          if (score1 === score2) return coinFlip(game.team1, game.team2);
+          return score1 >= score2 ? game.team1 : game.team2;
+        }
+        case 'team-win-pct': {
+          const pct1 = computeWinPct(stats1);
+          const pct2 = computeWinPct(stats2);
+          if (pct1 === null && pct2 === null) return coinFlip(game.team1, game.team2);
+          if (pct1 === null) return game.team2;
+          if (pct2 === null) return game.team1;
+          if (pct1 === pct2) return coinFlip(game.team1, game.team2);
+          return pct1 > pct2 ? game.team1 : game.team2;
+        }
+        case 'team-total-wins': {
+          const wins1 = stats1?.wins ?? null;
+          const wins2 = stats2?.wins ?? null;
+          if (wins1 === null && wins2 === null) return coinFlip(game.team1, game.team2);
+          if (wins1 === null) return game.team2;
+          if (wins2 === null) return game.team1;
+          if (wins1 === wins2) return coinFlip(game.team1, game.team2);
+          return wins1 > wins2 ? game.team1 : game.team2;
+        }
+        case 'team-titles': {
+          const titles1 = stats1?.titles ?? null;
+          const titles2 = stats2?.titles ?? null;
+          if (titles1 === null && titles2 === null) return coinFlip(game.team1, game.team2);
+          if (titles1 === null) return game.team2;
+          if (titles2 === null) return game.team1;
+          if (titles1 === titles2) return coinFlip(game.team1, game.team2);
+          return titles1 > titles2 ? game.team1 : game.team2;
+        }
+        case 'seed-weighted':
+          return seedWeightedPick(game.team1, seed1, game.team2, seed2);
+        case 'seed-record':
+        default: {
+          const probability = seedMatchupProbability(seed1, seed2);
+          if (probability !== null) {
+            return Math.random() <= probability ? game.team1 : game.team2;
+          }
+          if (!Number.isFinite(seed1) || !Number.isFinite(seed2)) {
+            return coinFlip(game.team1, game.team2);
+          }
+          if (seed1 === seed2) return coinFlip(game.team1, game.team2);
+          return seed1 < seed2 ? game.team1 : game.team2;
+        }
+      }
+    }
+
+    function resolveSeedFromPreviousRound(team) {
+      if (!state.currentYear) return null;
+      const rounds = state.tournaments.get(state.currentYear)?.rounds;
+      if (!rounds) return null;
+      const allRounds = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour', 'championship'];
+      for (const roundKey of allRounds) {
+        const games = Array.isArray(rounds[roundKey]) ? rounds[roundKey] : [rounds[roundKey]];
+        for (const game of games) {
+          if (!game) continue;
+          if (game.team1 === team) return game.seed1;
+          if (game.team2 === team) return game.seed2;
+          if (game.winner === team) return resolveWinnerSeed(game);
+        }
+      }
+      return null;
+    }
+
+    function legacyScore(team) {
+      if (!team || !state.aggregated) return 0;
+      const stats = state.aggregated.teamHistory.get(team);
+      if (!stats) return 0;
+      return stats.titles * 5 + stats.finalFour * 2 + stats.runnerUp;
+    }
+
+    function computeWinPct(stats) {
+      if (!stats) return null;
+      const total = stats.wins + stats.losses;
+      if (!total) return null;
+      return Number((stats.wins / total).toFixed(4));
+    }
+
+    function seedMatchupProbability(seed1, seed2) {
+      if (typeof seed1 !== 'number' || typeof seed2 !== 'number' || !state.aggregated) return null;
+      const lowerSeed = Math.min(seed1, seed2);
+      const higherSeed = Math.max(seed1, seed2);
+      const key = `${lowerSeed}-${higherSeed}`;
+      const record = state.aggregated.matchups.get(key);
+      if (!record || record.games < 3) return null;
+      const lowerWinRate = record.lowerWins / record.games;
+      return seed1 === lowerSeed ? lowerWinRate : 1 - lowerWinRate;
+    }
+
+    function renderSimulation(simulatedRounds, mode, accuracy = null) {
+      const summary = document.getElementById('simSummary');
+      const stats = document.getElementById('simStats');
+      const container = document.getElementById('simBracket');
+      const champion = simulatedRounds.championship?.winner;
+      
+      if (accuracy !== null) {
+        stats.style.display = 'inline-flex';
+        stats.textContent = `Match Accuracy: ${accuracy}%`;
+      } else {
+        stats.style.display = 'none';
+      }
+
+      summary.textContent = champion ? `${champion} lifts the trophy via ${modeLabel(mode)} simulation.` : 'Simulation incomplete.';
+      container.innerHTML = '';
+      const roundOrder = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour'];
+      roundOrder.forEach(roundKey => {
+        const column = document.createElement('div');
+        column.className = 'round-column';
+        const heading = document.createElement('h3');
+        heading.textContent = friendlyRound(roundKey);
+        column.appendChild(heading);
+        (simulatedRounds[roundKey] || []).forEach(game => column.appendChild(renderGameCard(game, roundKey === 'finalFour')));
+        container.appendChild(column);
+      });
+      const finalColumn = document.createElement('div');
+      finalColumn.className = 'round-column';
+      const heading = document.createElement('h3');
+      heading.textContent = 'Title Game';
+      finalColumn.appendChild(heading);
+      const finalCard = simulatedRounds.championship ? renderChampionshipCard(simulatedRounds.championship) : renderChampionshipCard(null);
+      finalColumn.appendChild(finalCard);
+      container.appendChild(finalColumn);
+    }
+
+    function modeLabel(mode) {
+      switch (mode) {
+        case 'seed-record':
+          return 'seed-performance';
+        case 'legacy':
+          return 'legacy-weighted';
+        case 'team-win-pct':
+          return 'team win percentage';
+        case 'team-total-wins':
+          return 'historical win leader';
+        case 'team-titles':
+          return 'championship priority';
+        case 'seed-weighted':
+          return 'seed-weighted draw';
+        default:
+          return 'random draw';
+      }
+    }
+
+    function seedWeightedPick(team1, seed1, team2, seed2) {
+      if (!Number.isFinite(seed1) || !Number.isFinite(seed2)) {
+        return coinFlip(team1, team2);
+      }
+      const total = seed1 + seed2;
+      if (total <= 0) return coinFlip(team1, team2);
+      const weight1 = Math.max(1, total - seed1);
+      const weight2 = Math.max(1, total - seed2);
+      const roll = Math.floor(Math.random() * (weight1 + weight2)) + 1;
+      return roll <= weight1 ? team1 : team2;
+    }
+
+    function coinFlip(team1, team2) {
+      return Math.random() < 0.5 ? team1 : team2;
+    }
+
+    function friendlyRound(roundKey) {
+      switch (roundKey) {
+        case 'round1': return 'Round of 64';
+        case 'round2': return 'Round of 32';
+        case 'sweet16': return 'Sweet 16';
+        case 'elite8': return 'Elite Eight';
+        case 'finalFour': return 'Final Four';
+        default: return roundKey;
+      }
+    }
+  </script>
+</body>
+</html>
