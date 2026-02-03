@@ -29,46 +29,20 @@
     body {
       margin: 0;
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.22), transparent 45%), radial-gradient(circle at bottom, rgba(59, 130, 246, 0.18), transparent 55%), var(--bg);
+      background: var(--bg);
       color: var(--text);
+      min-height: 100dvh;
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: stretch;
-      padding: 16px;
+      flex-direction: column;
     }
 
     .app {
-      width: min(1100px, 100%);
-      min-height: 100vh;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(26px);
-      border-radius: 22px;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      box-shadow: var(--shadow);
+      padding-top: calc(52px + env(safe-area-inset-top));
       overflow: hidden;
-      margin-top: calc(88px + env(safe-area-inset-top));
-      margin-bottom: 24px;
-    }
-
-    header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: clamp(1.4rem, 2vw + 1rem, 2rem);
-      letter-spacing: 0.01em;
-    }
-
-    header span {
-      font-size: 0.9rem;
-      color: var(--muted);
     }
 
     main {
@@ -76,62 +50,55 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
     .tab-panel {
       flex: 1;
       overflow-y: auto;
-      padding: clamp(16px, 2vw + 8px, 28px);
+      -webkit-overflow-scrolling: touch;
+      padding: 12px;
       display: none;
-      animation: fadeIn 0.3s ease;
     }
 
     .tab-panel.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+      display: flex;
+      flex-direction: column;
     }
 
     .tab-bar {
       display: flex;
-      justify-content: space-around;
-      border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.98);
-      padding: calc(12px + env(safe-area-inset-top)) 18px 12px;
+      gap: 4px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.92));
+      padding: calc(env(safe-area-inset-top) + 6px) 8px 6px;
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      backdrop-filter: blur(24px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .tab-btn {
       flex: 1;
       background: none;
       border: none;
-      color: rgba(226, 232, 240, 0.82);
-      font-size: 0.95rem;
-      font-weight: 500;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      transition: background 0.2s ease, color 0.2s ease;
+      gap: 2px;
+      padding: 6px 4px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
       cursor: pointer;
     }
 
     .tab-btn svg {
-      width: 22px;
-      height: 22px;
-      opacity: 0.85;
+      width: 18px;
+      height: 18px;
     }
 
     .tab-btn.active {
@@ -139,46 +106,42 @@
       background: var(--accent-soft);
     }
 
-    .tab-btn:not(.active) {
-      color: rgba(203, 213, 225, 0.78);
-    }
-
     .panel-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: clamp(16px, 1.5vw + 10px, 24px);
-      margin-bottom: 18px;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
 
     .panel-card h2 {
-      margin: 0 0 14px;
-      font-size: 1.1rem;
+      margin: 0 0 10px;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
     .control-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 8px;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     label {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: var(--muted);
     }
 
     select, button.primary {
-      border-radius: 12px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.7);
       color: var(--text);
-      padding: 10px 14px;
-      font-size: 0.95rem;
+      padding: 8px 10px;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      transition: border 0.2s ease, transform 0.15s ease;
     }
 
     select:focus, button.primary:focus {
@@ -187,52 +150,73 @@
     }
 
     button.primary {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.8), rgba(59, 130, 246, 0.8));
+      background: linear-gradient(135deg, var(--accent), #3b82f6);
       border: none;
     }
 
     button.primary:active {
-      transform: translateY(1px);
+      opacity: 0.9;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 4px;
+      border-radius: 8px;
+      margin-left: auto;
+    }
+
+    .view-toggle button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .view-toggle button.active {
+      background: var(--accent-soft);
+      color: var(--accent);
     }
 
     .bracket-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
       width: 100%;
     }
 
     .round-column h3 {
-      margin: 0 0 10px;
-      font-size: 0.95rem;
+      margin: 0 0 8px;
+      font-size: 0.8rem;
       color: var(--muted);
+      font-weight: 600;
     }
 
     .game-card {
-      border-radius: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      padding: 12px;
-      background: rgba(15, 23, 42, 0.55);
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      padding: 8px;
+      background: rgba(15, 23, 42, 0.6);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
-    }
-
-    .game-card:active {
-      transform: scale(0.98);
+      gap: 4px;
+      margin-bottom: 6px;
     }
 
     .game-card.highlight {
-      border-color: rgba(56, 189, 248, 0.55);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+      border-color: rgba(56, 189, 248, 0.5);
     }
 
     .team-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
     }
 
     .team-row.winner {
@@ -241,64 +225,157 @@
     }
 
     .team-meta {
-      display: flex;
-      gap: 6px;
-      font-size: 0.8rem;
+      font-size: 0.65rem;
       color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Tree Bracket View */
+    .bracket-tree {
+      display: none;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px;
+    }
+
+    .bracket-tree.active {
+      display: block;
+    }
+
+    .bracket-tree-inner {
+      display: flex;
+      gap: 8px;
+      min-width: max-content;
+    }
+
+    .tree-round {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      min-width: 130px;
+    }
+
+    .tree-round-label {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 4px 0 8px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 2;
+    }
+
+    .tree-game {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      margin: 4px 0;
+      font-size: 0.7rem;
+      position: relative;
+    }
+
+    .tree-game::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 8px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .tree-round:last-child .tree-game::after {
+      display: none;
+    }
+
+    .tree-team {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tree-team.winner {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .tree-seed {
+      color: var(--muted);
+      font-size: 0.65rem;
+      min-width: 16px;
     }
 
     .stat-table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 0.75rem;
     }
 
     .stat-table th, .stat-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
       text-align: left;
-      font-size: 0.9rem;
+    }
+
+    .stat-table th {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     .stat-table th.sortable {
       cursor: pointer;
-      position: relative;
       user-select: none;
       color: var(--muted);
     }
 
     .stat-table th.sortable::after {
-      content: '\2195';
-      font-size: 0.75rem;
-      position: absolute;
-      right: 8px;
-      opacity: 0.35;
+      content: '';
+      margin-left: 2px;
     }
 
     .stat-table th.sortable.active-asc::after {
-      content: '\2191';
-      opacity: 0.8;
+      content: '↑';
     }
 
     .stat-table th.sortable.active-desc::after {
-      content: '\2193';
-      opacity: 0.8;
+      content: '↓';
     }
 
-    .stat-table tbody tr:hover {
-      background: rgba(56, 189, 248, 0.08);
+    .stat-table tbody tr:active {
+      background: rgba(56, 189, 248, 0.1);
     }
 
     .clickable-row {
       cursor: pointer;
     }
 
+    .win-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .win-bar-fill {
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      min-width: 2px;
+    }
+
     .subtab-bar {
       display: flex;
-      gap: 8px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 8px;
-      border-radius: 14px;
-      margin-bottom: 16px;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 12px;
     }
 
     .subtab-btn {
@@ -307,10 +384,10 @@
       background: transparent;
       color: var(--muted);
       font-weight: 500;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 8px 6px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 0.75rem;
     }
 
     .subtab-btn.active {
@@ -350,41 +427,36 @@
 
     .seed-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
     }
 
     .seed-card {
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      background: rgba(15, 23, 42, 0.55);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      background: rgba(15, 23, 42, 0.6);
     }
 
     .seed-card h4 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
+      font-size: 0.8rem;
     }
 
     .muted {
       color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .pill-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      font-size: 0.8rem;
     }
 
     .sim-output {
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     .loading {
       display: inline-flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--muted);
     }
 
@@ -475,24 +547,20 @@
     }
 
     @media (max-width: 640px) {
-      body {
-        padding: 8px;
-      }
-
-      header {
-        padding: 20px;
-      }
-
-      .tab-panel {
-        padding: 18px;
-      }
-
-      .game-card {
-        padding: 10px;
-      }
-
       .modal-content {
-        max-height: 88vh;
+        max-height: 90dvh;
+        max-height: 90vh;
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .control-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .control-row label {
+        margin-bottom: -4px;
       }
     }
 
@@ -500,186 +568,148 @@
       .bracket-grid {
         display: flex;
         overflow-x: auto;
-        padding-bottom: 12px;
-        gap: 16px;
-        scroll-snap-type: x proximity;
+        gap: 12px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
       }
 
       .bracket-grid::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      .bracket-grid::-webkit-scrollbar-thumb {
-        background: rgba(148, 163, 184, 0.35);
-        border-radius: 999px;
+        display: none;
       }
 
       .round-column {
-        flex: 0 0 230px;
+        flex: 0 0 160px;
         scroll-snap-align: start;
-      }
-
-      .round-column h3 {
-        position: sticky;
-        top: 0;
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(12px);
-        padding: 8px 0;
-        margin-bottom: 12px;
-        z-index: 5;
-      }
-
-      .tab-btn svg {
-        width: 20px;
-        height: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app" role="application">
-    <header>
-      <div>
-        <h1>March Madness Archive</h1>
-        <span>Historical brackets, insights, simulations</span>
-      </div>
-      <div class="pill-group"></div>
-    </header>
+  <nav class="tab-bar" role="tablist">
+    <button class="tab-btn active" id="nav-brackets" data-tab="brackets" aria-controls="tab-brackets" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/>
+      </svg>
+      Brackets
+    </button>
+    <button class="tab-btn" id="nav-insights" data-tab="insights" aria-controls="tab-insights" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v18"/><path d="M3 17l4-4 4 4 8-8 2 2"/>
+      </svg>
+      Insights
+    </button>
+    <button class="tab-btn" id="nav-sim" data-tab="sim" aria-controls="tab-sim" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+      </svg>
+      Sim
+    </button>
+  </nav>
 
+  <div class="app" role="application">
     <main>
       <section id="tab-brackets" class="tab-panel active" aria-labelledby="nav-brackets">
         <div class="panel-card">
-          <h2>Replay a Tournament</h2>
           <div class="control-row">
-            <label for="yearSelect">Tournament year</label>
+            <label for="yearSelect">Year</label>
             <select id="yearSelect" aria-label="Select tournament year"></select>
+            <div class="view-toggle">
+              <button class="active" data-view="list">List</button>
+              <button data-view="tree">Tree</button>
+            </div>
           </div>
-          <div id="bracketSummary" class="muted"></div>
+          <div id="bracketSummary" class="muted" style="font-size:0.8rem;"></div>
         </div>
 
-        <div class="panel-card">
-          <h2>Complete Bracket</h2>
-          <div id="bracketView" class="bracket-grid"></div>
-          <div class="muted" style="margin-top:12px;">Tip: swipe horizontally to move between rounds on touch devices.</div>
+        <div class="panel-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+          <div id="bracketView" class="bracket-grid" style="flex:1; overflow:auto;"></div>
+          <div id="bracketTreeView" class="bracket-tree"></div>
         </div>
       </section>
 
       <section id="tab-insights" class="tab-panel" aria-labelledby="nav-insights">
-        <div class="panel-card">
-          <h2>Analytics Lab</h2>
+        <div class="panel-card" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
           <div class="subtab-bar" role="tablist">
-            <button class="subtab-btn active" data-subtab="team-history" aria-selected="true">Team history</button>
-            <button class="subtab-btn" data-subtab="seed-rounds" aria-selected="false">Seeds by round</button>
-            <button class="subtab-btn" data-subtab="seed-matchups" aria-selected="false">Seed matchups</button>
+            <button class="subtab-btn active" data-subtab="team-history" aria-selected="true">Teams</button>
+            <button class="subtab-btn" data-subtab="seed-rounds" aria-selected="false">Seeds</button>
+            <button class="subtab-btn" data-subtab="seed-matchups" aria-selected="false">Matchups</button>
           </div>
 
-          <div id="subtab-team-history" class="subtab-panel active" role="tabpanel">
-            <div class="muted" id="teamHistorySummary"></div>
-            <div style="overflow-x:auto; margin-top:16px;">
-              <table class="stat-table" aria-describedby="teamHistorySummary" data-team-table="true">
-                <thead>
-                  <tr>
-                    <th scope="col" class="sortable" data-sort="team">Team</th>
-                    <th scope="col" class="sortable" data-sort="titles">Titles</th>
-                    <th scope="col" class="sortable" data-sort="runnerUp">Runner-up</th>
-                    <th scope="col" class="sortable" data-sort="finalFour">Final Four</th>
-                    <th scope="col" class="sortable" data-sort="wins">Wins</th>
-                    <th scope="col" class="sortable" data-sort="losses">Losses</th>
-                    <th scope="col" class="sortable" data-sort="winPct">Win%</th>
-                  </tr>
-                </thead>
-                <tbody id="teamHistoryTable"></tbody>
-              </table>
-            </div>
+          <div id="subtab-team-history" class="subtab-panel active" role="tabpanel" style="flex:1; overflow:auto;">
+            <div class="muted" id="teamHistorySummary" style="font-size:0.75rem; margin-bottom:8px;"></div>
+            <table class="stat-table" aria-describedby="teamHistorySummary" data-team-table="true">
+              <thead>
+                <tr>
+                  <th scope="col" class="sortable" data-sort="team">Team</th>
+                  <th scope="col" class="sortable" data-sort="titles">🏆</th>
+                  <th scope="col" class="sortable" data-sort="wins">W</th>
+                  <th scope="col" class="sortable" data-sort="losses">L</th>
+                  <th scope="col" class="sortable" data-sort="winPct">%</th>
+                </tr>
+              </thead>
+              <tbody id="teamHistoryTable"></tbody>
+            </table>
           </div>
 
-          <div id="subtab-seed-rounds" class="subtab-panel" role="tabpanel">
-            <div class="muted" style="margin-bottom:12px;">Win share by seed and round across the archive.</div>
+          <div id="subtab-seed-rounds" class="subtab-panel" role="tabpanel" style="flex:1; overflow:auto;">
             <div id="seedRoundGrid" class="seed-grid"></div>
           </div>
 
-          <div id="subtab-seed-matchups" class="subtab-panel" role="tabpanel">
-            <div class="muted" style="margin-bottom:12px;">Historical head-to-head records between seeds.</div>
-            <div style="overflow-x:auto;">
-              <table class="stat-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Matchup</th>
-                    <th scope="col">Games</th>
-                    <th scope="col">Lower seed win%</th>
-                    <th scope="col">Higher seed win%</th>
-                  </tr>
-                </thead>
-                <tbody id="seedMatchupTable"></tbody>
-              </table>
-            </div>
+          <div id="subtab-seed-matchups" class="subtab-panel" role="tabpanel" style="flex:1; overflow:auto;">
+            <table class="stat-table">
+              <thead>
+                <tr>
+                  <th scope="col">Matchup</th>
+                  <th scope="col">G</th>
+                  <th scope="col">Low%</th>
+                  <th scope="col">High%</th>
+                </tr>
+              </thead>
+              <tbody id="seedMatchupTable"></tbody>
+            </table>
           </div>
         </div>
       </section>
 
       <section id="tab-sim" class="tab-panel" aria-labelledby="nav-sim">
         <div class="panel-card">
-          <h2>Simulate a Tournament</h2>
           <div class="control-row">
-            <label for="simYearSelect">Bracket year</label>
+            <label for="simYearSelect">Year</label>
             <select id="simYearSelect" aria-label="Select a bracket for simulation"></select>
-            <label for="simModeSelect">Simulation mode</label>
+            <label for="simModeSelect">Mode</label>
             <select id="simModeSelect" aria-label="Select simulation mode">
               <option value="seed-record">Seed record</option>
-              <option value="random">Pure random</option>
-              <option value="legacy">Legacy wins</option>
-              <option value="team-win-pct">Team win %</option>
-              <option value="team-total-wins">Total wins</option>
-              <option value="team-titles">Championship count</option>
-              <option value="seed-weighted">Seed weighted</option>
+              <option value="random">Random</option>
+              <option value="legacy">Legacy</option>
+              <option value="team-win-pct">Win %</option>
+              <option value="team-total-wins">Total W</option>
+              <option value="team-titles">Titles</option>
+              <option value="seed-weighted">Weighted</option>
             </select>
-            <button class="primary" id="simulateBtn">Run simulation</button>
+            <button class="primary" id="simulateBtn">Run</button>
           </div>
-          <div class="muted">Seed record uses matchup history; legacy favors decorated programs. Team win%, total wins, championship count, and seed weighting offer alternate projection styles.</div>
           
-          <div style="margin-top:20px;">
-            <details>
-              <summary style="cursor:pointer; color:var(--accent); font-weight:500; margin-bottom:10px;">Custom Team Field (Optional)</summary>
-              <div class="panel-card" style="margin-top:10px; border-style:dashed;">
-                <p class="muted" style="margin-bottom:10px;">Paste 64 teams (one per line) or use dummy names. If empty, the selected bracket year is used.</p>
-                <textarea id="customTeams" placeholder="Kentucky&#10;Duke&#10;..." style="width:100%; height:120px; background:rgba(15,23,42,0.6); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:12px; font-family:inherit;"></textarea>
-                <div style="margin-top:10px; display: flex; gap: 8px;">
-                  <button class="primary" id="fillDummyBtn" style="background:var(--surface-light);">Fill dummy teams</button>
-                  <button class="primary" id="clearCustomBtn" style="background:var(--surface-light);">Clear</button>
-                </div>
+          <details style="margin-top:8px;">
+            <summary style="cursor:pointer; color:var(--accent); font-size:0.8rem; font-weight:500;">Custom Field</summary>
+            <div style="margin-top:8px; padding:10px; border:1px dashed var(--border); border-radius:8px;">
+              <textarea id="customTeams" placeholder="64 teams, one per line..." style="width:100%; height:80px; background:rgba(15,23,42,0.7); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:0.75rem; font-family:inherit; resize:none;"></textarea>
+              <div style="margin-top:6px; display:flex; gap:6px;">
+                <button class="primary" id="fillDummyBtn" style="background:var(--surface-light); font-size:0.75rem; padding:6px 10px;">Dummy</button>
+                <button class="primary" id="clearCustomBtn" style="background:var(--surface-light); font-size:0.75rem; padding:6px 10px;">Clear</button>
               </div>
-            </details>
-          </div>
+            </div>
+          </details>
+        </div>
 
-          <div class="sim-output">
-            <div id="simStats" class="tag-pill" style="margin-bottom:12px; display:none;"></div>
-            <div id="simSummary" class="muted"></div>
-            <div id="simBracket" class="bracket-grid" style="margin-top:18px;"></div>
+        <div class="panel-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <div id="simStats" class="tag-pill" style="display:none; font-size:0.7rem; padding:4px 8px;"></div>
+            <div id="simSummary" class="muted" style="font-size:0.8rem;"></div>
           </div>
+          <div id="simBracket" class="bracket-grid" style="flex:1; overflow:auto;"></div>
         </div>
       </section>
     </main>
-
-    <nav class="tab-bar" role="tablist">
-      <button class="tab-btn active" id="nav-brackets" data-tab="brackets" aria-controls="tab-brackets" aria-selected="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/>
-        </svg>
-        Brackets
-      </button>
-      <button class="tab-btn" id="nav-insights" data-tab="insights" aria-controls="tab-insights" aria-selected="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 3v18"/><path d="M3 17l4-4 4 4 8-8 2 2"/>
-        </svg>
-        Insights
-      </button>
-      <button class="tab-btn" id="nav-sim" data-tab="sim" aria-controls="tab-sim" aria-selected="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        Sim
-      </button>
-    </nav>
   </div>
 
     <div id="teamModal" class="modal-overlay" hidden>
@@ -715,11 +745,13 @@
       currentYear: null,
       loaded: false,
       teamSort: { key: 'titles', direction: 'desc' },
+      bracketView: 'list',
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       setupTabs();
       setupSubtabs();
+      setupViewToggle();
       setupTeamTableInteractions();
       setupModalControls();
       bootstrap();
@@ -763,6 +795,21 @@
           document.querySelectorAll('.subtab-panel').forEach(panel => {
             panel.classList.toggle('active', panel.id === `subtab-${target}`);
           });
+        });
+      });
+    }
+
+    function setupViewToggle() {
+      document.querySelectorAll('.view-toggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const view = btn.dataset.view;
+          state.bracketView = view;
+          document.querySelectorAll('.view-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+          document.getElementById('bracketView').style.display = view === 'list' ? '' : 'none';
+          document.getElementById('bracketTreeView').classList.toggle('active', view === 'tree');
+          if (view === 'tree' && state.currentYear) {
+            renderBracketTree(state.currentYear);
+          }
         });
       });
     }
@@ -824,17 +871,20 @@
       document.getElementById('simYearSelect').value = year;
       renderBracket(year);
       renderBracketSummary(year);
+      if (state.bracketView === 'tree') {
+        renderBracketTree(year);
+      }
     }
 
     function renderBracket(year) {
       const data = state.tournaments.get(year);
       const roundOrder = [
-        { key: 'round1', label: 'Round of 64' },
-        { key: 'round2', label: 'Round of 32' },
-        { key: 'sweet16', label: 'Sweet 16' },
-        { key: 'elite8', label: 'Elite Eight' },
-        { key: 'finalFour', label: 'Final Four' },
-        { key: 'championship', label: 'Title Game' },
+        { key: 'round1', label: 'R64' },
+        { key: 'round2', label: 'R32' },
+        { key: 'sweet16', label: 'S16' },
+        { key: 'elite8', label: 'E8' },
+        { key: 'finalFour', label: 'F4' },
+        { key: 'championship', label: 'Final' },
       ];
       const container = document.getElementById('bracketView');
       container.innerHTML = '';
@@ -854,11 +904,70 @@
       });
     }
 
+    function renderBracketTree(year) {
+      const data = state.tournaments.get(year);
+      if (!data) return;
+      const container = document.getElementById('bracketTreeView');
+      container.innerHTML = '';
+      
+      const inner = document.createElement('div');
+      inner.className = 'bracket-tree-inner';
+      
+      const roundOrder = [
+        { key: 'round1', label: 'R64' },
+        { key: 'round2', label: 'R32' },
+        { key: 'sweet16', label: 'Sweet 16' },
+        { key: 'elite8', label: 'Elite 8' },
+        { key: 'finalFour', label: 'Final 4' },
+        { key: 'championship', label: 'Championship' },
+      ];
+      
+      roundOrder.forEach(round => {
+        const col = document.createElement('div');
+        col.className = 'tree-round';
+        
+        const label = document.createElement('div');
+        label.className = 'tree-round-label';
+        label.textContent = round.label;
+        col.appendChild(label);
+        
+        if (round.key === 'championship') {
+          const final = data.rounds.championship;
+          if (final) {
+            col.appendChild(renderTreeGame(final));
+          }
+        } else {
+          const games = data.rounds[round.key] || [];
+          games.forEach(game => col.appendChild(renderTreeGame(game)));
+        }
+        
+        inner.appendChild(col);
+      });
+      
+      container.appendChild(inner);
+    }
+
+    function renderTreeGame(game) {
+      const card = document.createElement('div');
+      card.className = 'tree-game';
+      
+      const t1 = document.createElement('div');
+      t1.className = 'tree-team' + (game.winner === game.team1 ? ' winner' : '');
+      t1.innerHTML = `<span class="tree-seed">${game.seed1 ?? ''}</span> ${game.team1 || 'TBD'}`;
+      
+      const t2 = document.createElement('div');
+      t2.className = 'tree-team' + (game.winner === game.team2 ? ' winner' : '');
+      t2.innerHTML = `<span class="tree-seed">${game.seed2 ?? ''}</span> ${game.team2 || 'TBD'}`;
+      
+      card.appendChild(t1);
+      card.appendChild(t2);
+      return card;
+    }
+
     function renderGameCard(game, highlight = false) {
       const card = document.createElement('article');
       card.className = 'game-card';
       if (highlight) card.classList.add('highlight');
-      const winnerSeed = resolveWinnerSeed(game);
       const teams = [
         { team: game.team1, seed: game.seed1, score: game.score1 },
         { team: game.team2, seed: game.seed2, score: game.score2 },
@@ -868,13 +977,9 @@
         row.className = 'team-row';
         const isWinner = entry.team === game.winner;
         if (isWinner) row.classList.add('winner');
-        row.innerHTML = `<span>${entry.seed ?? '?'} • ${entry.team || 'TBD'}</span><span>${entry.score ?? ''}</span>`;
+        row.innerHTML = `<span>${entry.seed ?? '?'} ${entry.team || 'TBD'}</span><span>${entry.score ?? ''}</span>`;
         card.appendChild(row);
       });
-      const meta = document.createElement('div');
-      meta.className = 'team-meta';
-      meta.innerHTML = [`Winner: ${game.winner || 'TBD'}`, winnerSeed ? `Seed ${winnerSeed}` : '', game.region ? `${game.region} region` : ''].filter(Boolean).join(' · ');
-      card.appendChild(meta);
       return card;
     }
 
@@ -882,7 +987,7 @@
       if (!final) {
         const empty = document.createElement('div');
         empty.className = 'empty-state';
-        empty.textContent = 'Championship data unavailable for this season.';
+        empty.textContent = 'No data';
         return empty;
       }
       const card = document.createElement('article');
@@ -895,7 +1000,7 @@
         const row = document.createElement('div');
         row.className = 'team-row';
         if (entry.team === final.winner) row.classList.add('winner');
-        row.innerHTML = `<span>${entry.seed ?? '?'} • ${entry.team}</span><span>${entry.score ?? ''}</span>`;
+        row.innerHTML = `<span>${entry.seed ?? '?'} ${entry.team}</span><span>${entry.score ?? ''}</span>`;
         card.appendChild(row);
       });
       const meta = document.createElement('div');
@@ -909,7 +1014,7 @@
     function renderBracketSummary(year) {
       const data = state.tournaments.get(year);
       const summary = document.getElementById('bracketSummary');
-      summary.innerHTML = `Champion ${data.champion} (Seed ${data.championSeed}) over ${data.runnerUp} (Seed ${data.runnerUpSeed}). Final Four: ${data.finalFour.map(team => `${team.team} (${team.seed})`).join(', ')}.`;
+      summary.innerHTML = `🏆 ${data.champion} (${data.championSeed}) def. ${data.runnerUp} (${data.runnerUpSeed})`;
     }
 
     function resolveWinnerSeed(game) {
@@ -1113,21 +1218,19 @@
       rows.forEach(entry => {
         const row = document.createElement('tr');
         const totalGames = entry.wins + entry.losses;
-        const winPct = totalGames ? (entry.winPct * 100).toFixed(1) : '0.0';
+        const winPct = totalGames ? (entry.winPct * 100).toFixed(0) : '0';
         row.dataset.team = entry.team;
         row.classList.add('clickable-row');
         row.innerHTML = `
           <td>${entry.team}</td>
-          <td>${entry.titles}</td>
-          <td>${entry.runnerUp}</td>
-          <td>${entry.finalFour}</td>
+          <td>${entry.titles || '-'}</td>
           <td>${entry.wins}</td>
           <td>${entry.losses}</td>
-          <td>${winPct}%</td>
+          <td><div class="win-bar"><div class="win-bar-fill" style="width:${Math.min(winPct, 100) * 0.4}px"></div>${winPct}%</div></td>
         `;
         tbody.appendChild(row);
       });
-      document.getElementById('teamHistorySummary').textContent = `${teamHistory.size} programs recorded wins since ${YEAR_START}. Tap headers to sort or click a team for full game history.`;
+      document.getElementById('teamHistorySummary').textContent = `${teamHistory.size} teams · Tap to view history`;
       updateTeamSortIndicators();
     }
 
@@ -1136,12 +1239,12 @@
       container.innerHTML = '';
       const order = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour', 'championship'];
       const labels = {
-        round1: 'Round of 64',
-        round2: 'Round of 32',
-        sweet16: 'Sweet 16',
-        elite8: 'Elite Eight',
-        finalFour: 'Final Four',
-        championship: 'Championship',
+        round1: 'R64',
+        round2: 'R32',
+        sweet16: 'S16',
+        elite8: 'E8',
+        finalFour: 'F4',
+        championship: 'Final',
       };
       order.forEach(roundKey => {
         const roundMap = state.aggregated.seedRounds.get(roundKey);
@@ -1150,17 +1253,20 @@
         card.className = 'seed-card';
         const heading = document.createElement('h4');
         heading.textContent = labels[roundKey];
+        heading.style.fontSize = '0.85rem';
+        heading.style.marginBottom = '8px';
         card.appendChild(heading);
         const list = document.createElement('div');
-        list.className = 'muted';
         list.style.display = 'grid';
-        list.style.gridTemplateColumns = 'repeat(auto-fit, minmax(120px, 1fr))';
-        list.style.gap = '6px 12px';
+        list.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        list.style.gap = '4px';
+        list.style.fontSize = '0.7rem';
         const seeds = Array.from(roundMap.entries()).sort((a, b) => a[0] - b[0]);
         seeds.forEach(([seed, record]) => {
-          const winRate = record.games ? ((record.wins / record.games) * 100).toFixed(1) : '0.0';
+          const winRate = record.games ? ((record.wins / record.games) * 100).toFixed(0) : '0';
           const entry = document.createElement('div');
-          entry.textContent = `Seed ${seed}: ${winRate}% (${record.wins}/${record.games})`;
+          entry.style.color = 'var(--muted)';
+          entry.innerHTML = `<span style="color:var(--text)">${seed}:</span> ${winRate}%`;
           list.appendChild(entry);
         });
         card.appendChild(list);
@@ -1176,12 +1282,13 @@
         .sort((a, b) => b.games - a.games);
       records.forEach(entry => {
         const row = document.createElement('tr');
-        const lowerRate = entry.games ? ((entry.lowerWins / entry.games) * 100).toFixed(1) : '0.0';
-        const higherRate = entry.games ? ((entry.higherWins / entry.games) * 100).toFixed(1) : '0.0';
+        const lowerRate = entry.games ? ((entry.lowerWins / entry.games) * 100).toFixed(0) : '0';
+        const higherRate = entry.games ? ((entry.higherWins / entry.games) * 100).toFixed(0) : '0';
+        const barWidth = Math.round(parseFloat(lowerRate) * 0.5);
         row.innerHTML = `
-          <td>${entry.lowerSeed} vs ${entry.higherSeed}</td>
+          <td>${entry.lowerSeed}v${entry.higherSeed}</td>
           <td>${entry.games}</td>
-          <td>${lowerRate}%</td>
+          <td><div class="win-bar"><div class="win-bar-fill" style="width:${barWidth}px"></div>${lowerRate}%</div></td>
           <td>${higherRate}%</td>
         `;
         table.appendChild(row);
@@ -1566,12 +1673,12 @@
       
       if (accuracy !== null) {
         stats.style.display = 'inline-flex';
-        stats.textContent = `Match Accuracy: ${accuracy}%`;
+        stats.textContent = `${accuracy}% match`;
       } else {
         stats.style.display = 'none';
       }
 
-      summary.textContent = champion ? `${champion} lifts the trophy via ${modeLabel(mode)} simulation.` : 'Simulation incomplete.';
+      summary.textContent = champion ? `🏆 ${champion}` : 'Incomplete';
       container.innerHTML = '';
       const roundOrder = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour'];
       roundOrder.forEach(roundKey => {
@@ -1586,7 +1693,7 @@
       const finalColumn = document.createElement('div');
       finalColumn.className = 'round-column';
       const heading = document.createElement('h3');
-      heading.textContent = 'Title Game';
+      heading.textContent = 'Final';
       finalColumn.appendChild(heading);
       const finalCard = simulatedRounds.championship ? renderChampionshipCard(simulatedRounds.championship) : renderChampionshipCard(null);
       finalColumn.appendChild(finalCard);
@@ -1630,11 +1737,11 @@
 
     function friendlyRound(roundKey) {
       switch (roundKey) {
-        case 'round1': return 'Round of 64';
-        case 'round2': return 'Round of 32';
-        case 'sweet16': return 'Sweet 16';
-        case 'elite8': return 'Elite Eight';
-        case 'finalFour': return 'Final Four';
+        case 'round1': return 'R64';
+        case 'round2': return 'R32';
+        case 'sweet16': return 'S16';
+        case 'elite8': return 'E8';
+        case 'finalFour': return 'F4';
         default: return roundKey;
       }
     }
