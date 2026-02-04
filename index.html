@@ -41,7 +41,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding-top: calc(52px + env(safe-area-inset-top));
+      padding-bottom: calc(60px + env(safe-area-inset-bottom));
       overflow: hidden;
     }
 
@@ -67,16 +67,17 @@
 
     .tab-bar {
       display: flex;
-      gap: 4px;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.92));
-      padding: calc(env(safe-area-inset-top) + 6px) 8px 6px;
+      gap: 0;
+      background: rgba(20, 27, 45, 0.95);
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
       position: fixed;
-      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
     }
 
     .tab-btn {
@@ -84,26 +85,30 @@
       background: none;
       border: none;
       color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.65rem;
+      font-weight: 500;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      padding: 6px 4px;
-      border-radius: 8px;
-      transition: all 0.15s ease;
+      gap: 3px;
+      padding: 4px 8px;
+      border-radius: 0;
+      transition: color 0.15s ease;
       cursor: pointer;
     }
 
     .tab-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
+      stroke-width: 1.8;
     }
 
     .tab-btn.active {
       color: var(--accent);
-      background: var(--accent-soft);
+    }
+
+    .tab-btn.active svg {
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
     }
 
     .panel-card {
@@ -156,6 +161,31 @@
 
     button.primary:active {
       opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent);
+    }
+
+    .simtab-panel {
+      display: none;
+    }
+
+    .simtab-panel.active {
+      display: block;
     }
 
     .view-toggle {
@@ -230,85 +260,144 @@
       margin-top: 2px;
     }
 
-    /* Tree Bracket View */
+    /* Bracket Tree View - Real bracket with lines */
     .bracket-tree {
       display: none;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 8px;
+      flex: 1;
     }
 
     .bracket-tree.active {
       display: block;
     }
 
-    .bracket-tree-inner {
+    .bracket-container {
       display: flex;
-      gap: 8px;
+      padding: 12px;
       min-width: max-content;
+      gap: 0;
     }
 
-    .tree-round {
+    .bracket-round {
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
-      min-width: 130px;
-    }
-
-    .tree-round-label {
-      text-align: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--muted);
-      padding: 4px 0 8px;
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 2;
-    }
-
-    .tree-game {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 8px;
-      margin: 4px 0;
-      font-size: 0.7rem;
       position: relative;
     }
 
-    .tree-game::after {
-      content: '';
-      position: absolute;
-      right: -8px;
-      top: 50%;
-      width: 8px;
-      height: 1px;
-      background: var(--border);
+    .bracket-round-header {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      padding: 4px 8px 10px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 3;
+      min-width: 120px;
     }
 
-    .tree-round:last-child .tree-game::after {
-      display: none;
-    }
-
-    .tree-team {
+    .bracket-games {
       display: flex;
-      justify-content: space-between;
-      padding: 2px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      flex-direction: column;
+      justify-content: space-around;
+      flex: 1;
+      position: relative;
     }
 
-    .tree-team.winner {
+    .bracket-game {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin: 4px 0;
+      font-size: 0.68rem;
+      position: relative;
+      min-width: 110px;
+      overflow: hidden;
+    }
+
+    .bracket-game.champion {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .bracket-team {
+      display: flex;
+      align-items: center;
+      padding: 5px 8px;
+      gap: 6px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      transition: background 0.15s;
+    }
+
+    .bracket-team:last-child {
+      border-bottom: none;
+    }
+
+    .bracket-team.winner {
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .bracket-team.winner .bracket-team-name {
       color: var(--accent);
       font-weight: 600;
     }
 
-    .tree-seed {
+    .bracket-seed {
       color: var(--muted);
-      font-size: 0.65rem;
+      font-size: 0.6rem;
+      min-width: 14px;
+      text-align: center;
+    }
+
+    .bracket-team-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .bracket-score {
+      color: var(--muted);
+      font-size: 0.6rem;
       min-width: 16px;
+      text-align: right;
+    }
+
+    /* Connector lines */
+    .bracket-connector {
+      width: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      position: relative;
+    }
+
+    .connector-line {
+      position: absolute;
+      background: var(--border);
+    }
+
+    .connector-h {
+      height: 1px;
+      width: 10px;
+    }
+
+    .connector-v {
+      width: 1px;
+    }
+
+    /* List view styling */
+    .bracket-list {
+      display: none;
+      overflow: auto;
+      flex: 1;
+    }
+
+    .bracket-list.active {
+      display: block;
     }
 
     .stat-table {
@@ -472,12 +561,13 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(14px);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 24px;
+      align-items: flex-end;
+      padding: 0;
       z-index: 200;
     }
 
@@ -486,40 +576,113 @@
     }
 
     .modal-content {
-      width: min(540px, 100%);
-      max-height: 80vh;
+      width: 100%;
+      max-height: 85vh;
       overflow-y: auto;
-      background: rgba(15, 23, 42, 0.92);
-      border-radius: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.45);
-      padding: 24px;
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border-radius: 24px 24px 0 0;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-bottom: none;
+      box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.45);
+      padding: 0;
       color: var(--text);
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       gap: 16px;
-      margin-bottom: 18px;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      position: sticky;
+      top: 0;
+      background: rgba(30, 41, 59, 0.98);
+      z-index: 1;
     }
 
     .modal-header h3 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .modal-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
     }
 
     .modal-close {
-      background: none;
+      background: var(--surface-light);
       border: none;
       color: var(--muted);
-      font-size: 1.2rem;
+      font-size: 1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
     }
 
     .modal-close:hover {
+      background: rgba(255, 255, 255, 0.15);
       color: var(--accent);
+    }
+
+    .modal-stats-row {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .modal-stat {
+      flex: 1;
+      min-width: 70px;
+      text-align: center;
+      padding: 12px 8px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .modal-stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .modal-stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-top: 2px;
+    }
+
+    .modal-body {
+      padding: 16px 20px 24px;
+    }
+
+    .modal-section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 12px;
     }
 
     .game-history-list {
@@ -528,18 +691,55 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .game-history-item {
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 12px;
       padding: 12px 14px;
-      background: rgba(15, 23, 42, 0.55);
+      background: rgba(15, 23, 42, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .game-history-item strong {
+    .game-history-item.win {
+      border-left: 3px solid #22c55e;
+    }
+
+    .game-history-item.loss {
+      border-left: 3px solid #ef4444;
+    }
+
+    .game-history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .game-history-year {
+      font-weight: 600;
       color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    .game-history-round {
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: var(--surface-light);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .game-history-matchup {
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .game-history-detail {
+      font-size: 0.7rem;
+      color: var(--muted);
     }
 
     @keyframes spin {
@@ -585,27 +785,6 @@
   </style>
 </head>
 <body>
-  <nav class="tab-bar" role="tablist">
-    <button class="tab-btn active" id="nav-brackets" data-tab="brackets" aria-controls="tab-brackets" aria-selected="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/>
-      </svg>
-      Brackets
-    </button>
-    <button class="tab-btn" id="nav-insights" data-tab="insights" aria-controls="tab-insights" aria-selected="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 3v18"/><path d="M3 17l4-4 4 4 8-8 2 2"/>
-      </svg>
-      Insights
-    </button>
-    <button class="tab-btn" id="nav-sim" data-tab="sim" aria-controls="tab-sim" aria-selected="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-      </svg>
-      Sim
-    </button>
-  </nav>
-
   <div class="app" role="application">
     <main>
       <section id="tab-brackets" class="tab-panel active" aria-labelledby="nav-brackets">
@@ -613,17 +792,17 @@
           <div class="control-row">
             <label for="yearSelect">Year</label>
             <select id="yearSelect" aria-label="Select tournament year"></select>
-            <div class="view-toggle">
-              <button class="active" data-view="list">List</button>
-              <button data-view="tree">Tree</button>
+            <div class="view-toggle" id="bracketViewToggle">
+              <button data-view="tree" class="active">Bracket</button>
+              <button data-view="list">List</button>
             </div>
           </div>
           <div id="bracketSummary" class="muted" style="font-size:0.8rem;"></div>
         </div>
 
         <div class="panel-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-          <div id="bracketView" class="bracket-grid" style="flex:1; overflow:auto;"></div>
-          <div id="bracketTreeView" class="bracket-tree"></div>
+          <div id="bracketTreeView" class="bracket-tree active"></div>
+          <div id="bracketListView" class="bracket-list"></div>
         </div>
       </section>
 
@@ -673,55 +852,124 @@
 
       <section id="tab-sim" class="tab-panel" aria-labelledby="nav-sim">
         <div class="panel-card">
-          <div class="control-row">
-            <label for="simYearSelect">Year</label>
-            <select id="simYearSelect" aria-label="Select a bracket for simulation"></select>
-            <label for="simModeSelect">Mode</label>
-            <select id="simModeSelect" aria-label="Select simulation mode">
-              <option value="seed-record">Seed record</option>
-              <option value="random">Random</option>
-              <option value="legacy">Legacy</option>
-              <option value="team-win-pct">Win %</option>
-              <option value="team-total-wins">Total W</option>
-              <option value="team-titles">Titles</option>
-              <option value="seed-weighted">Weighted</option>
-            </select>
-            <button class="primary" id="simulateBtn">Run</button>
+          <div class="subtab-bar" role="tablist" style="margin-bottom:8px;">
+            <button class="subtab-btn active" data-simtab="single" aria-selected="true">Single Year</button>
+            <button class="subtab-btn" data-simtab="batch" aria-selected="false">All Years</button>
+            <button class="subtab-btn" data-simtab="custom" aria-selected="false">Custom</button>
           </div>
-          
-          <details style="margin-top:8px;">
-            <summary style="cursor:pointer; color:var(--accent); font-size:0.8rem; font-weight:500;">Custom Field</summary>
-            <div style="margin-top:8px; padding:10px; border:1px dashed var(--border); border-radius:8px;">
-              <textarea id="customTeams" placeholder="64 teams, one per line..." style="width:100%; height:80px; background:rgba(15,23,42,0.7); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:0.75rem; font-family:inherit; resize:none;"></textarea>
-              <div style="margin-top:6px; display:flex; gap:6px;">
-                <button class="primary" id="fillDummyBtn" style="background:var(--surface-light); font-size:0.75rem; padding:6px 10px;">Dummy</button>
-                <button class="primary" id="clearCustomBtn" style="background:var(--surface-light); font-size:0.75rem; padding:6px 10px;">Clear</button>
-              </div>
+
+          <div id="simtab-single" class="simtab-panel active">
+            <div class="control-row">
+              <label for="simYearSelect">Year</label>
+              <select id="simYearSelect" aria-label="Select a bracket for simulation"></select>
+              <label for="simModeSelect">Mode</label>
+              <select id="simModeSelect" aria-label="Select simulation mode">
+                <option value="seed-record">Seed record</option>
+                <option value="random">Random</option>
+                <option value="legacy">Legacy</option>
+                <option value="team-win-pct">Win %</option>
+                <option value="team-total-wins">Total W</option>
+                <option value="team-titles">Titles</option>
+                <option value="seed-weighted">Weighted</option>
+              </select>
+              <button class="primary" id="simulateBtn">Run</button>
             </div>
-          </details>
+          </div>
+
+          <div id="simtab-batch" class="simtab-panel" style="display:none;">
+            <div class="control-row">
+              <label for="batchModeSelect">Mode</label>
+              <select id="batchModeSelect" aria-label="Select batch simulation mode">
+                <option value="seed-record">Seed record</option>
+                <option value="random">Random</option>
+                <option value="legacy">Legacy</option>
+                <option value="team-win-pct">Win %</option>
+                <option value="team-total-wins">Total W</option>
+                <option value="team-titles">Titles</option>
+                <option value="seed-weighted">Weighted</option>
+              </select>
+              <button class="primary" id="batchSimBtn">Run All Years</button>
+            </div>
+            <div id="batchResults" style="margin-top:10px; font-size:0.75rem; max-height:150px; overflow-y:auto;"></div>
+          </div>
+
+          <div id="simtab-custom" class="simtab-panel" style="display:none;">
+            <div class="control-row" style="margin-bottom:8px;">
+              <label for="customModeSelect">Mode</label>
+              <select id="customModeSelect" aria-label="Select custom simulation mode">
+                <option value="seed-record">Seed record</option>
+                <option value="random">Random</option>
+                <option value="legacy">Legacy</option>
+                <option value="team-win-pct">Win %</option>
+                <option value="team-total-wins">Total W</option>
+                <option value="team-titles">Titles</option>
+                <option value="seed-weighted">Weighted</option>
+              </select>
+              <button class="primary" id="runCustomBtn">Run</button>
+            </div>
+            <textarea id="customTeams" placeholder="64 teams, one per line (seeded 1-16 in each region)..." style="width:100%; height:100px; background:rgba(15,23,42,0.7); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:0.75rem; font-family:inherit; resize:none;"></textarea>
+            <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn-secondary" id="fillDummyBtn">Dummy Teams</button>
+              <button class="btn-secondary" id="scrambleTeamsBtn">Random Historical</button>
+              <button class="btn-secondary" id="loadYearBtn">Load Year Field</button>
+              <button class="btn-secondary" id="clearCustomBtn">Clear</button>
+            </div>
+            <div id="customLoadRow" style="margin-top:6px; display:none;">
+              <select id="loadYearSelect" style="background:var(--surface-light); color:var(--text); border:1px solid var(--border); border-radius:4px; padding:4px 8px; font-size:0.7rem;"></select>
+              <button class="btn-secondary" id="confirmLoadYearBtn" style="margin-left:4px;">Load</button>
+            </div>
+          </div>
         </div>
 
         <div class="panel-card" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
             <div id="simStats" class="tag-pill" style="display:none; font-size:0.7rem; padding:4px 8px;"></div>
             <div id="simSummary" class="muted" style="font-size:0.8rem;"></div>
+            <div class="view-toggle" id="simViewToggle" style="margin-left:auto;">
+              <button data-view="tree" class="active">Bracket</button>
+              <button data-view="list">List</button>
+            </div>
           </div>
-          <div id="simBracket" class="bracket-grid" style="flex:1; overflow:auto;"></div>
+          <div id="simTreeView" class="bracket-tree active"></div>
+          <div id="simListView" class="bracket-list"></div>
         </div>
       </section>
     </main>
   </div>
+
+  <nav class="tab-bar" role="tablist">
+    <button class="tab-btn active" id="nav-brackets" data-tab="brackets" aria-controls="tab-brackets" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 5h4v4H3z"/><path d="M3 15h4v4H3z"/><path d="M7 7h4v0"/><path d="M7 17h4v0"/><path d="M11 7v10"/><path d="M11 12h4"/><path d="M15 12v0h4v0"/>
+      </svg>
+      Bracket
+    </button>
+    <button class="tab-btn" id="nav-insights" data-tab="insights" aria-controls="tab-insights" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+      </svg>
+      Stats
+    </button>
+    <button class="tab-btn" id="nav-sim" data-tab="sim" aria-controls="tab-sim" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      Simulate
+    </button>
+  </nav>
 
     <div id="teamModal" class="modal-overlay" hidden>
       <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle">
         <div class="modal-header">
           <div>
             <h3 id="teamModalTitle"></h3>
-            <div id="teamModalSubtitle" class="muted"></div>
+            <div id="teamModalSubtitle" class="modal-subtitle"></div>
           </div>
           <button class="modal-close" id="teamModalClose" aria-label="Close team history dialog">&times;</button>
         </div>
-        <div id="teamModalBody">
+        <div id="teamModalStats" class="modal-stats-row"></div>
+        <div class="modal-body" id="teamModalBody">
+          <h4 class="modal-section-title">Tournament History</h4>
           <ul id="teamModalList" class="game-history-list"></ul>
         </div>
       </div>
@@ -739,21 +987,38 @@
     const YEAR_END = 2025;
     const ROUND_SEQUENCE = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour', 'championship'];
 
+    // Team name aliases - maps variations to canonical names
+    const TEAM_ALIASES = {
+      'Connecticut': 'UConn',
+      'UNC': 'North Carolina',
+      'Pitt': 'Pittsburgh',
+      'Ole Miss': 'Mississippi',
+    };
+
+    function normalizeTeamName(name) {
+      if (!name) return name;
+      return TEAM_ALIASES[name] || name;
+    }
+
     const state = {
       tournaments: new Map(),
       aggregated: null,
       currentYear: null,
       loaded: false,
       teamSort: { key: 'titles', direction: 'desc' },
-      bracketView: 'list',
+      bracketView: 'tree',
+      simView: 'tree',
+      allHistoricalTeams: [], // For random team scrambler
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       setupTabs();
       setupSubtabs();
-      setupViewToggle();
+      setupSimTabs();
+      setupViewToggles();
       setupTeamTableInteractions();
       setupModalControls();
+      setupSimControls();
       bootstrap();
     });
 
@@ -787,7 +1052,8 @@
       document.querySelectorAll('.subtab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const target = btn.dataset.subtab;
-          document.querySelectorAll('.subtab-btn').forEach(b => {
+          if (!target) return; // Skip if no subtab data attribute (might be simtab)
+          document.querySelectorAll('.subtab-btn[data-subtab]').forEach(b => {
             const isActive = b === btn;
             b.classList.toggle('active', isActive);
             b.setAttribute('aria-selected', isActive ? 'true' : 'false');
@@ -799,27 +1065,79 @@
       });
     }
 
-    function setupViewToggle() {
-      document.querySelectorAll('.view-toggle button').forEach(btn => {
+    function setupSimTabs() {
+      document.querySelectorAll('[data-simtab]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.simtab;
+          document.querySelectorAll('[data-simtab]').forEach(b => {
+            const isActive = b === btn;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+          document.querySelectorAll('.simtab-panel').forEach(panel => {
+            const isTarget = panel.id === `simtab-${target}`;
+            panel.style.display = isTarget ? 'block' : 'none';
+            panel.classList.toggle('active', isTarget);
+          });
+        });
+      });
+    }
+
+    function setupSimControls() {
+      // Single year simulate
+      document.getElementById('simulateBtn')?.addEventListener('click', runSimulation);
+
+      // Batch simulation
+      document.getElementById('batchSimBtn')?.addEventListener('click', runBatchSimulation);
+
+      // Custom field controls
+      document.getElementById('runCustomBtn')?.addEventListener('click', runCustomSimulation);
+      document.getElementById('fillDummyBtn')?.addEventListener('click', fillDummyTeams);
+      document.getElementById('scrambleTeamsBtn')?.addEventListener('click', scrambleRandomTeams);
+      document.getElementById('clearCustomBtn')?.addEventListener('click', () => {
+        document.getElementById('customTeams').value = '';
+      });
+      
+      // Load year field
+      document.getElementById('loadYearBtn')?.addEventListener('click', () => {
+        const loadRow = document.getElementById('customLoadRow');
+        loadRow.style.display = loadRow.style.display === 'none' ? 'flex' : 'none';
+      });
+      document.getElementById('confirmLoadYearBtn')?.addEventListener('click', loadYearField);
+    }
+
+    function setupViewToggles() {
+      // Bracket tab view toggle
+      document.querySelectorAll('#bracketViewToggle button').forEach(btn => {
         btn.addEventListener('click', () => {
           const view = btn.dataset.view;
           state.bracketView = view;
-          document.querySelectorAll('.view-toggle button').forEach(b => b.classList.toggle('active', b === btn));
-          document.getElementById('bracketView').style.display = view === 'list' ? '' : 'none';
+          document.querySelectorAll('#bracketViewToggle button').forEach(b => b.classList.toggle('active', b === btn));
+          document.getElementById('bracketListView').classList.toggle('active', view === 'list');
           document.getElementById('bracketTreeView').classList.toggle('active', view === 'tree');
-          if (view === 'tree' && state.currentYear) {
-            renderBracketTree(state.currentYear);
-          }
+        });
+      });
+
+      // Sim tab view toggle
+      document.querySelectorAll('#simViewToggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const view = btn.dataset.view;
+          state.simView = view;
+          document.querySelectorAll('#simViewToggle button').forEach(b => b.classList.toggle('active', b === btn));
+          document.getElementById('simListView').classList.toggle('active', view === 'list');
+          document.getElementById('simTreeView').classList.toggle('active', view === 'tree');
         });
       });
     }
 
     function renderLoading() {
-      const bracketView = document.getElementById('bracketView');
-      const simBracket = document.getElementById('simBracket');
+      const bracketTree = document.getElementById('bracketTreeView');
+      const simTree = document.getElementById('simTreeView');
       const template = document.getElementById('loadingTemplate');
-      bracketView.replaceChildren(template.content.cloneNode(true));
-      simBracket.replaceChildren(template.content.cloneNode(true));
+      bracketTree.innerHTML = '';
+      bracketTree.appendChild(template.content.cloneNode(true));
+      simTree.innerHTML = '';
+      simTree.appendChild(template.content.cloneNode(true));
     }
 
     async function loadAllTournaments() {
@@ -846,17 +1164,14 @@
       const yearOptions = Array.from(state.tournaments.keys()).sort((a, b) => b - a);
       const yearSelect = document.getElementById('yearSelect');
       const simYearSelect = document.getElementById('simYearSelect');
+      const loadYearSelect = document.getElementById('loadYearSelect');
       yearOptions.forEach(year => {
         const option = new Option(year, year);
         yearSelect.add(option.cloneNode(true));
-        simYearSelect.add(option);
+        simYearSelect.add(option.cloneNode(true));
+        if (loadYearSelect) loadYearSelect.add(option.cloneNode(true));
       });
       yearSelect.addEventListener('change', event => setActiveYear(Number(event.target.value)));
-      document.getElementById('simulateBtn').addEventListener('click', () => runSimulation());
-      document.getElementById('fillDummyBtn').addEventListener('click', () => fillDummyTeams());
-      document.getElementById('clearCustomBtn').addEventListener('click', () => {
-        document.getElementById('customTeams').value = '';
-      });
     }
 
     function fillDummyTeams() {
@@ -864,44 +1179,108 @@
       document.getElementById('customTeams').value = dummies.join('\n');
     }
 
+    function scrambleRandomTeams() {
+      if (state.allHistoricalTeams.length < 64) {
+        alert('Historical team data not yet loaded');
+        return;
+      }
+      // Shuffle and pick 64 unique teams
+      const shuffled = [...state.allHistoricalTeams].sort(() => Math.random() - 0.5);
+      const uniqueTeams = [...new Set(shuffled)].slice(0, 64);
+      if (uniqueTeams.length < 64) {
+        // Fill with duplicates if needed
+        while (uniqueTeams.length < 64) {
+          uniqueTeams.push(shuffled[uniqueTeams.length % shuffled.length]);
+        }
+      }
+      document.getElementById('customTeams').value = uniqueTeams.join('\n');
+    }
+
+    function loadYearField() {
+      const year = Number(document.getElementById('loadYearSelect').value);
+      if (!state.tournaments.has(year)) return;
+      const data = state.tournaments.get(year);
+      const teams = [];
+      // Extract teams from round1 in bracket order
+      (data.rounds.round1 || []).forEach(game => {
+        teams.push(game.team1 || 'TBD');
+        teams.push(game.team2 || 'TBD');
+      });
+      document.getElementById('customTeams').value = teams.join('\n');
+      document.getElementById('customLoadRow').style.display = 'none';
+    }
+
+    function runCustomSimulation() {
+      if (!state.loaded || !state.aggregated) {
+        alert('Datasets still loading. Try again in a moment.');
+        return;
+      }
+      const customInput = document.getElementById('customTeams').value.trim();
+      if (!customInput) {
+        alert('Please enter teams or use the fill options.');
+        return;
+      }
+      const teams = customInput.split('\n').map(t => t.trim()).filter(Boolean);
+      if (teams.length < 64) {
+        alert(`Please provide at least 64 teams (currently ${teams.length}).`);
+        return;
+      }
+      const mode = document.getElementById('customModeSelect').value;
+      const baseRounds = { round1: buildCustomRound1(teams.slice(0, 64)) };
+      const bracket = simulateBracket(baseRounds, mode);
+      renderSimulation(bracket, mode, null);
+    }
+
+    function runBatchSimulation() {
+      if (!state.loaded || !state.aggregated) {
+        alert('Datasets still loading. Try again in a moment.');
+        return;
+      }
+      const mode = document.getElementById('batchModeSelect').value;
+      const resultsDiv = document.getElementById('batchResults');
+      resultsDiv.innerHTML = '<div class="muted">Running simulations...</div>';
+      
+      const years = Array.from(state.tournaments.keys()).sort((a, b) => b - a);
+      const results = [];
+      let totalAccuracy = 0;
+      let count = 0;
+      
+      years.forEach(year => {
+        const data = state.tournaments.get(year);
+        if (!data?.rounds?.round1) return;
+        const bracket = simulateBracket(data.rounds, mode);
+        const accuracy = calculateBracketAccuracy(bracket, data.rounds);
+        if (accuracy !== null) {
+          totalAccuracy += accuracy;
+          count++;
+        }
+        const correct = bracket.championship?.winner === data.champion;
+        results.push({ year, accuracy, champion: bracket.championship?.winner, actual: data.champion, correct });
+      });
+      
+      const avgAccuracy = count > 0 ? (totalAccuracy / count).toFixed(1) : '0';
+      const correctChamps = results.filter(r => r.correct).length;
+      
+      let html = `<div style="margin-bottom:8px;"><strong>Avg Accuracy:</strong> ${avgAccuracy}% · <strong>Correct Champs:</strong> ${correctChamps}/${results.length}</div>`;
+      html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:4px;">';
+      results.forEach(r => {
+        const color = r.correct ? '#22c55e' : 'var(--muted)';
+        html += `<div style="padding:4px 6px; background:var(--surface-light); border-radius:6px; font-size:0.7rem;">
+          <span style="color:${color};">${r.year}</span>: ${r.accuracy ?? '?'}% ${r.correct ? '✓' : ''}
+        </div>`;
+      });
+      html += '</div>';
+      resultsDiv.innerHTML = html;
+    }
+
     function setActiveYear(year) {
       if (!state.tournaments.has(year)) return;
       state.currentYear = year;
       document.getElementById('yearSelect').value = year;
       document.getElementById('simYearSelect').value = year;
-      renderBracket(year);
+      renderBracketTree(year);
+      renderBracketList(year);
       renderBracketSummary(year);
-      if (state.bracketView === 'tree') {
-        renderBracketTree(year);
-      }
-    }
-
-    function renderBracket(year) {
-      const data = state.tournaments.get(year);
-      const roundOrder = [
-        { key: 'round1', label: 'R64' },
-        { key: 'round2', label: 'R32' },
-        { key: 'sweet16', label: 'S16' },
-        { key: 'elite8', label: 'E8' },
-        { key: 'finalFour', label: 'F4' },
-        { key: 'championship', label: 'Final' },
-      ];
-      const container = document.getElementById('bracketView');
-      container.innerHTML = '';
-      roundOrder.forEach(round => {
-        const column = document.createElement('div');
-        column.className = 'round-column';
-        const header = document.createElement('h3');
-        header.textContent = round.label;
-        column.appendChild(header);
-        if (round.key === 'championship') {
-          column.appendChild(renderChampionshipCard(data.rounds.championship));
-        } else {
-          const games = data.rounds[round.key] || [];
-          games.forEach(game => column.appendChild(renderGameCard(game, round.key === 'finalFour')));
-        }
-        container.appendChild(column);
-      });
     }
 
     function renderBracketTree(year) {
@@ -909,78 +1288,148 @@
       if (!data) return;
       const container = document.getElementById('bracketTreeView');
       container.innerHTML = '';
-      
-      const inner = document.createElement('div');
-      inner.className = 'bracket-tree-inner';
+      container.appendChild(createBracketTreeElement(data.rounds));
+    }
+
+    function renderBracketList(year) {
+      const data = state.tournaments.get(year);
+      if (!data) return;
+      const container = document.getElementById('bracketListView');
+      container.innerHTML = '';
       
       const roundOrder = [
-        { key: 'round1', label: 'R64' },
-        { key: 'round2', label: 'R32' },
+        { key: 'round1', label: 'Round of 64' },
+        { key: 'round2', label: 'Round of 32' },
         { key: 'sweet16', label: 'Sweet 16' },
-        { key: 'elite8', label: 'Elite 8' },
-        { key: 'finalFour', label: 'Final 4' },
+        { key: 'elite8', label: 'Elite Eight' },
+        { key: 'finalFour', label: 'Final Four' },
         { key: 'championship', label: 'Championship' },
       ];
       
       roundOrder.forEach(round => {
-        const col = document.createElement('div');
-        col.className = 'tree-round';
+        const section = document.createElement('div');
+        section.style.marginBottom = '16px';
         
-        const label = document.createElement('div');
-        label.className = 'tree-round-label';
-        label.textContent = round.label;
-        col.appendChild(label);
+        const header = document.createElement('h3');
+        header.style.cssText = 'font-size:0.85rem; color:var(--accent); margin:0 0 8px; padding:0 4px;';
+        header.textContent = round.label;
+        section.appendChild(header);
+        
+        const gamesContainer = document.createElement('div');
+        gamesContainer.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px;';
         
         if (round.key === 'championship') {
           const final = data.rounds.championship;
-          if (final) {
-            col.appendChild(renderTreeGame(final));
-          }
+          if (final) gamesContainer.appendChild(renderListGame(final, true));
         } else {
-          const games = data.rounds[round.key] || [];
-          games.forEach(game => col.appendChild(renderTreeGame(game)));
+          (data.rounds[round.key] || []).forEach(game => {
+            gamesContainer.appendChild(renderListGame(game, round.key === 'finalFour'));
+          });
         }
         
-        inner.appendChild(col);
+        section.appendChild(gamesContainer);
+        container.appendChild(section);
       });
-      
-      container.appendChild(inner);
     }
 
-    function renderTreeGame(game) {
+    function createBracketTreeElement(rounds, isChampion = false) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'bracket-container';
+      
+      const roundOrder = [
+        { key: 'round1', label: 'R64', games: 32 },
+        { key: 'round2', label: 'R32', games: 16 },
+        { key: 'sweet16', label: 'Sweet 16', games: 8 },
+        { key: 'elite8', label: 'Elite 8', games: 4 },
+        { key: 'finalFour', label: 'Final 4', games: 2 },
+        { key: 'championship', label: 'Champion', games: 1 },
+      ];
+      
+      roundOrder.forEach((round, roundIndex) => {
+        // Add round column
+        const col = document.createElement('div');
+        col.className = 'bracket-round';
+        
+        const header = document.createElement('div');
+        header.className = 'bracket-round-header';
+        header.textContent = round.label;
+        col.appendChild(header);
+        
+        const gamesDiv = document.createElement('div');
+        gamesDiv.className = 'bracket-games';
+        
+        if (round.key === 'championship') {
+          const final = rounds.championship;
+          if (final) {
+            gamesDiv.appendChild(createBracketGame(final, true));
+          }
+        } else {
+          const games = rounds[round.key] || [];
+          games.forEach(game => {
+            gamesDiv.appendChild(createBracketGame(game, false));
+          });
+        }
+        
+        col.appendChild(gamesDiv);
+        wrapper.appendChild(col);
+        
+        // Add connector column between rounds (except after last)
+        if (roundIndex < roundOrder.length - 1) {
+          const connector = document.createElement('div');
+          connector.className = 'bracket-connector';
+          wrapper.appendChild(connector);
+        }
+      });
+      
+      return wrapper;
+    }
+
+    function createBracketGame(game, isChampionship = false) {
       const card = document.createElement('div');
-      card.className = 'tree-game';
+      card.className = 'bracket-game' + (isChampionship ? ' champion' : '');
       
       const t1 = document.createElement('div');
-      t1.className = 'tree-team' + (game.winner === game.team1 ? ' winner' : '');
-      t1.innerHTML = `<span class="tree-seed">${game.seed1 ?? ''}</span> ${game.team1 || 'TBD'}`;
+      t1.className = 'bracket-team' + (game.winner === game.team1 ? ' winner' : '');
+      t1.innerHTML = `
+        <span class="bracket-seed">${game.seed1 ?? ''}</span>
+        <span class="bracket-team-name">${game.team1 || 'TBD'}</span>
+        <span class="bracket-score">${game.score1 ?? ''}</span>
+      `;
       
       const t2 = document.createElement('div');
-      t2.className = 'tree-team' + (game.winner === game.team2 ? ' winner' : '');
-      t2.innerHTML = `<span class="tree-seed">${game.seed2 ?? ''}</span> ${game.team2 || 'TBD'}`;
+      t2.className = 'bracket-team' + (game.winner === game.team2 ? ' winner' : '');
+      t2.innerHTML = `
+        <span class="bracket-seed">${game.seed2 ?? ''}</span>
+        <span class="bracket-team-name">${game.team2 || 'TBD'}</span>
+        <span class="bracket-score">${game.score2 ?? ''}</span>
+      `;
       
       card.appendChild(t1);
       card.appendChild(t2);
       return card;
     }
 
-    function renderGameCard(game, highlight = false) {
-      const card = document.createElement('article');
-      card.className = 'game-card';
-      if (highlight) card.classList.add('highlight');
+    function renderListGame(game, highlight = false) {
+      const card = document.createElement('div');
+      card.className = 'game-card' + (highlight ? ' highlight' : '');
+      
       const teams = [
         { team: game.team1, seed: game.seed1, score: game.score1 },
         { team: game.team2, seed: game.seed2, score: game.score2 },
       ];
+      
       teams.forEach(entry => {
         const row = document.createElement('div');
-        row.className = 'team-row';
-        const isWinner = entry.team === game.winner;
-        if (isWinner) row.classList.add('winner');
+        row.className = 'team-row' + (entry.team === game.winner ? ' winner' : '');
         row.innerHTML = `<span>${entry.seed ?? '?'} ${entry.team || 'TBD'}</span><span>${entry.score ?? ''}</span>`;
         card.appendChild(row);
       });
+      
       return card;
+    }
+
+    function renderGameCard(game, highlight = false) {
+      return renderListGame(game, highlight);
     }
 
     function renderChampionshipCard(final) {
@@ -990,25 +1439,7 @@
         empty.textContent = 'No data';
         return empty;
       }
-      const card = document.createElement('article');
-      card.className = 'game-card highlight';
-      const teams = [
-        { team: final.team1, seed: final.seed1, score: final.score1 },
-        { team: final.team2, seed: final.seed2, score: final.score2 },
-      ];
-      teams.forEach(entry => {
-        const row = document.createElement('div');
-        row.className = 'team-row';
-        if (entry.team === final.winner) row.classList.add('winner');
-        row.innerHTML = `<span>${entry.seed ?? '?'} ${entry.team}</span><span>${entry.score ?? ''}</span>`;
-        card.appendChild(row);
-      });
-      const meta = document.createElement('div');
-      meta.className = 'team-meta';
-      const championSeed = resolveWinnerSeed(final);
-      meta.innerHTML = [`Champion: ${final.winner}`, championSeed ? `Seed ${championSeed}` : ''].filter(Boolean).join(' · ');
-      card.appendChild(meta);
-      return card;
+      return renderListGame(final, true);
     }
 
     function renderBracketSummary(year) {
@@ -1070,14 +1501,18 @@
         matchups: matchupMap,
         totalSeasons: tournaments.length,
       };
+      
+      // Build historical teams list for random scrambler
+      state.allHistoricalTeams = Array.from(teamMap.keys());
     }
 
     function ensureTeam(map, teamName) {
       if (!teamName) return null;
-      if (!map.has(teamName)) {
-        map.set(teamName, { titles: 0, runnerUp: 0, finalFour: 0, wins: 0, losses: 0, games: [] });
+      const normalized = normalizeTeamName(teamName);
+      if (!map.has(normalized)) {
+        map.set(normalized, { titles: 0, runnerUp: 0, finalFour: 0, wins: 0, losses: 0, games: [] });
       }
-      return map.get(teamName);
+      return map.get(normalized);
     }
 
     function registerRoundGame(seedRoundMap, teamMap, roundKey, game, year) {
@@ -1356,15 +1791,50 @@
       if (!teamName || !state.aggregated) return;
       const overlay = document.getElementById('teamModal');
       if (!overlay) return;
-      const stats = state.aggregated.teamHistory.get(teamName);
+      
+      // Try normalized name first, then original
+      let stats = state.aggregated.teamHistory.get(normalizeTeamName(teamName));
+      if (!stats) stats = state.aggregated.teamHistory.get(teamName);
       if (!stats) return;
+      
       const title = document.getElementById('teamModalTitle');
       const subtitle = document.getElementById('teamModalSubtitle');
+      const statsRow = document.getElementById('teamModalStats');
       const list = document.getElementById('teamModalList');
+      
       if (title) title.textContent = teamName;
       const totalGames = stats.wins + stats.losses;
       const winPct = totalGames ? ((stats.wins / totalGames) * 100).toFixed(1) : '0.0';
-      if (subtitle) subtitle.textContent = `${stats.wins}-${stats.losses} (${winPct}%) since ${YEAR_START}`;
+      const uniqueYears = new Set(stats.games.map(g => g.year)).size;
+      
+      if (subtitle) subtitle.textContent = `${uniqueYears} tournaments since ${YEAR_START}`;
+      
+      // Render stats row
+      if (statsRow) {
+        statsRow.innerHTML = `
+          <div class="modal-stat">
+            <div class="modal-stat-value">${stats.titles}</div>
+            <div class="modal-stat-label">Titles</div>
+          </div>
+          <div class="modal-stat">
+            <div class="modal-stat-value">${stats.finalFour}</div>
+            <div class="modal-stat-label">Final 4s</div>
+          </div>
+          <div class="modal-stat">
+            <div class="modal-stat-value">${stats.wins}</div>
+            <div class="modal-stat-label">Wins</div>
+          </div>
+          <div class="modal-stat">
+            <div class="modal-stat-value">${stats.losses}</div>
+            <div class="modal-stat-label">Losses</div>
+          </div>
+          <div class="modal-stat">
+            <div class="modal-stat-value">${winPct}%</div>
+            <div class="modal-stat-label">Win %</div>
+          </div>
+        `;
+      }
+      
       if (list) {
         list.innerHTML = '';
         const history = stats.games.slice().sort((a, b) => {
@@ -1386,19 +1856,21 @@
         } else {
           history.forEach(item => {
             const li = document.createElement('li');
-            li.className = 'game-history-item';
-            const resultLabel = item.result === 'W' ? 'Win' : 'Loss';
-            const seeds = [
-              typeof item.teamSeed === 'number' ? `Seed ${item.teamSeed}` : null,
-              typeof item.opponentSeed === 'number' ? `vs Seed ${item.opponentSeed}` : null,
-            ].filter(Boolean).join(' · ');
+            li.className = `game-history-item ${item.result === 'W' ? 'win' : 'loss'}`;
             const scoreLine = (item.teamScore !== null && item.opponentScore !== null)
               ? `${item.teamScore}-${item.opponentScore}`
-              : null;
+              : '';
             li.innerHTML = `
-              <strong>${item.year} · ${item.round}</strong>
-              <div>${resultLabel} vs ${item.opponent}${seeds ? ` · ${seeds}` : ''}</div>
-              ${scoreLine ? `<div>Score: ${scoreLine}</div>` : ''}
+              <div class="game-history-header">
+                <span class="game-history-year">${item.year}</span>
+                <span class="game-history-round">${item.round}</span>
+              </div>
+              <div class="game-history-matchup">
+                ${item.result === 'W' ? 'W' : 'L'} vs <strong>${item.opponent}</strong> ${scoreLine}
+              </div>
+              <div class="game-history-detail">
+                ${item.teamSeed ? `#${item.teamSeed}` : ''} vs ${item.opponentSeed ? `#${item.opponentSeed}` : ''}
+              </div>
             `;
             list.appendChild(li);
           });
@@ -1423,29 +1895,11 @@
       const yearSelect = document.getElementById('simYearSelect');
       const year = Number(yearSelect.value);
       const mode = document.getElementById('simModeSelect').value;
-      const customInput = document.getElementById('customTeams').value.trim();
       
-      let baseRounds;
-      let usingCustom = false;
-
-      if (customInput) {
-        const teams = customInput.split('\n').map(t => t.trim()).filter(Boolean);
-        if (teams.length < 64) {
-          alert(`Please provide at least 64 teams (currently ${teams.length}).`);
-          return;
-        }
-        usingCustom = true;
-        baseRounds = { round1: buildCustomRound1(teams.slice(0, 64)) };
-      } else {
-        if (!state.tournaments.has(year)) return;
-        baseRounds = state.tournaments.get(year).rounds;
-      }
-
+      if (!state.tournaments.has(year)) return;
+      const baseRounds = state.tournaments.get(year).rounds;
       const bracket = simulateBracket(baseRounds, mode);
-      let accuracy = null;
-      if (!usingCustom && state.tournaments.has(year)) {
-        accuracy = calculateBracketAccuracy(bracket, state.tournaments.get(year).rounds);
-      }
+      const accuracy = calculateBracketAccuracy(bracket, state.tournaments.get(year).rounds);
       
       renderSimulation(bracket, mode, accuracy);
     }
@@ -1668,7 +2122,8 @@
     function renderSimulation(simulatedRounds, mode, accuracy = null) {
       const summary = document.getElementById('simSummary');
       const stats = document.getElementById('simStats');
-      const container = document.getElementById('simBracket');
+      const treeContainer = document.getElementById('simTreeView');
+      const listContainer = document.getElementById('simListView');
       const champion = simulatedRounds.championship?.winner;
       
       if (accuracy !== null) {
@@ -1679,25 +2134,97 @@
       }
 
       summary.textContent = champion ? `🏆 ${champion}` : 'Incomplete';
-      container.innerHTML = '';
-      const roundOrder = ['round1', 'round2', 'sweet16', 'elite8', 'finalFour'];
-      roundOrder.forEach(roundKey => {
-        const column = document.createElement('div');
-        column.className = 'round-column';
-        const heading = document.createElement('h3');
-        heading.textContent = friendlyRound(roundKey);
-        column.appendChild(heading);
-        (simulatedRounds[roundKey] || []).forEach(game => column.appendChild(renderGameCard(game, roundKey === 'finalFour')));
-        container.appendChild(column);
+      
+      // Render tree view
+      treeContainer.innerHTML = '';
+      treeContainer.appendChild(createSimTreeElement(simulatedRounds));
+      
+      // Render list view - match format of bracket list
+      listContainer.innerHTML = '';
+      const roundOrder = [
+        { key: 'round1', label: 'Round of 64' },
+        { key: 'round2', label: 'Round of 32' },
+        { key: 'sweet16', label: 'Sweet 16' },
+        { key: 'elite8', label: 'Elite Eight' },
+        { key: 'finalFour', label: 'Final Four' },
+        { key: 'championship', label: 'Championship' },
+      ];
+      
+      roundOrder.forEach(round => {
+        const section = document.createElement('div');
+        section.style.marginBottom = '16px';
+        
+        const header = document.createElement('h3');
+        header.style.cssText = 'font-size:0.85rem; color:var(--accent); margin:0 0 8px; padding:0 4px;';
+        header.textContent = round.label;
+        section.appendChild(header);
+        
+        const gamesContainer = document.createElement('div');
+        gamesContainer.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px;';
+        
+        if (round.key === 'championship') {
+          if (simulatedRounds.championship) {
+            gamesContainer.appendChild(renderListGame(simulatedRounds.championship, true));
+          }
+        } else {
+          (simulatedRounds[round.key] || []).forEach(game => {
+            gamesContainer.appendChild(renderListGame(game, round.key === 'finalFour'));
+          });
+        }
+        
+        section.appendChild(gamesContainer);
+        listContainer.appendChild(section);
       });
-      const finalColumn = document.createElement('div');
-      finalColumn.className = 'round-column';
-      const heading = document.createElement('h3');
-      heading.textContent = 'Final';
-      finalColumn.appendChild(heading);
-      const finalCard = simulatedRounds.championship ? renderChampionshipCard(simulatedRounds.championship) : renderChampionshipCard(null);
-      finalColumn.appendChild(finalCard);
-      container.appendChild(finalColumn);
+    }
+    
+    function createSimTreeElement(simulatedRounds) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'bracket-container';
+      
+      const roundOrder = [
+        { key: 'round1', label: 'R64' },
+        { key: 'round2', label: 'R32' },
+        { key: 'sweet16', label: 'Sweet 16' },
+        { key: 'elite8', label: 'Elite 8' },
+        { key: 'finalFour', label: 'Final 4' },
+        { key: 'championship', label: 'Champion' },
+      ];
+      
+      roundOrder.forEach((round, roundIndex) => {
+        const col = document.createElement('div');
+        col.className = 'bracket-round';
+        
+        const header = document.createElement('div');
+        header.className = 'bracket-round-header';
+        header.textContent = round.label;
+        col.appendChild(header);
+        
+        const gamesDiv = document.createElement('div');
+        gamesDiv.className = 'bracket-games';
+        
+        if (round.key === 'championship') {
+          if (simulatedRounds.championship) {
+            gamesDiv.appendChild(createBracketGame(simulatedRounds.championship, true));
+          }
+        } else {
+          const games = simulatedRounds[round.key] || [];
+          games.forEach(game => {
+            gamesDiv.appendChild(createBracketGame(game, false));
+          });
+        }
+        
+        col.appendChild(gamesDiv);
+        wrapper.appendChild(col);
+        
+        // Add connector column between rounds
+        if (roundIndex < roundOrder.length - 1) {
+          const connector = document.createElement('div');
+          connector.className = 'bracket-connector';
+          wrapper.appendChild(connector);
+        }
+      });
+      
+      return wrapper;
     }
 
     function modeLabel(mode) {
