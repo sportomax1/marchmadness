@@ -366,6 +366,31 @@
       text-align: right;
     }
 
+    .team-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .team-logo.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    .team-logo.large {
+      width: 32px;
+      height: 32px;
+    }
+
+    .modal-team-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
     /* Connector lines */
     .bracket-connector {
       width: 20px;
@@ -1009,6 +1034,7 @@
       bracketView: 'tree',
       simView: 'tree',
       allHistoricalTeams: [], // For random team scrambler
+      teamLogos: {}, // Loaded from team-logos.json
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1024,6 +1050,7 @@
 
     async function bootstrap() {
       renderLoading();
+      await loadTeamLogos();
       await loadAllTournaments();
       populateYearSelectors();
       computeAggregatedStats();
@@ -1031,6 +1058,25 @@
       state.loaded = true;
       const defaultYear = state.tournaments.size ? Math.max(...state.tournaments.keys()) : YEAR_END;
       setActiveYear(defaultYear);
+    }
+
+    async function loadTeamLogos() {
+      try {
+        const response = await fetch('./team-logos.json');
+        if (response.ok) {
+          const data = await response.json();
+          state.teamLogos = data.teamLogos || {};
+        }
+      } catch (err) {
+        console.warn('Failed to load team logos:', err);
+      }
+    }
+
+    function getTeamLogoUrl(teamName) {
+      if (!teamName || !state.teamLogos) return null;
+      // Try normalized name first
+      const normalized = normalizeTeamName(teamName);
+      return state.teamLogos[normalized] || state.teamLogos[teamName] || null;
     }
 
     function setupTabs() {
@@ -1388,24 +1434,24 @@
       const card = document.createElement('div');
       card.className = 'bracket-game' + (isChampionship ? ' champion' : '');
       
-      const t1 = document.createElement('div');
-      t1.className = 'bracket-team' + (game.winner === game.team1 ? ' winner' : '');
-      t1.innerHTML = `
-        <span class="bracket-seed">${game.seed1 ?? ''}</span>
-        <span class="bracket-team-name">${game.team1 || 'TBD'}</span>
-        <span class="bracket-score">${game.score1 ?? ''}</span>
-      `;
+      const createTeamDiv = (team, seed, score, isWinner) => {
+        const div = document.createElement('div');
+        div.className = 'bracket-team' + (isWinner ? ' winner' : '');
+        
+        const logoUrl = getTeamLogoUrl(team);
+        const logoHtml = logoUrl ? `<img src="${logoUrl}" alt="${team}" class="team-logo" onerror="this.style.display='none'">` : '';
+        
+        div.innerHTML = `
+          <span class="bracket-seed">${seed ?? ''}</span>
+          ${logoHtml}
+          <span class="bracket-team-name">${team || 'TBD'}</span>
+          <span class="bracket-score">${score ?? ''}</span>
+        `;
+        return div;
+      };
       
-      const t2 = document.createElement('div');
-      t2.className = 'bracket-team' + (game.winner === game.team2 ? ' winner' : '');
-      t2.innerHTML = `
-        <span class="bracket-seed">${game.seed2 ?? ''}</span>
-        <span class="bracket-team-name">${game.team2 || 'TBD'}</span>
-        <span class="bracket-score">${game.score2 ?? ''}</span>
-      `;
-      
-      card.appendChild(t1);
-      card.appendChild(t2);
+      card.appendChild(createTeamDiv(game.team1, game.seed1, game.score1, game.winner === game.team1));
+      card.appendChild(createTeamDiv(game.team2, game.seed2, game.score2, game.winner === game.team2));
       return card;
     }
 
@@ -1421,7 +1467,11 @@
       teams.forEach(entry => {
         const row = document.createElement('div');
         row.className = 'team-row' + (entry.team === game.winner ? ' winner' : '');
-        row.innerHTML = `<span>${entry.seed ?? '?'} ${entry.team || 'TBD'}</span><span>${entry.score ?? ''}</span>`;
+        
+        const logoUrl = getTeamLogoUrl(entry.team);
+        const logoHtml = logoUrl ? `<img src="${logoUrl}" alt="${entry.team}" class="team-logo small" onerror="this.style.display='none'">` : '';
+        
+        row.innerHTML = `<span>${logoHtml}<span>${entry.seed ?? '?'} ${entry.team || 'TBD'}</span></span><span>${entry.score ?? ''}</span>`;
         card.appendChild(row);
       });
       
@@ -1802,7 +1852,15 @@
       const statsRow = document.getElementById('teamModalStats');
       const list = document.getElementById('teamModalList');
       
-      if (title) title.textContent = teamName;
+      const logoUrl = getTeamLogoUrl(teamName);
+      if (title) {
+        title.innerHTML = logoUrl 
+          ? `<img src="${logoUrl}" alt="${teamName}" class="modal-team-logo" onerror="this.style.display='none'">${teamName}`
+          : teamName;
+        title.style.display = 'flex';
+        title.style.alignItems = 'center';
+        title.style.gap = '12px';
+      }
       const totalGames = stats.wins + stats.losses;
       const winPct = totalGames ? ((stats.wins / totalGames) * 100).toFixed(1) : '0.0';
       const uniqueYears = new Set(stats.games.map(g => g.year)).size;
