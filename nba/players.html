@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>NBA Players | Active Rosters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --bg-hover: #22222e;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.3);
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --border: #2a2a3a;
+      --success: #10b981;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-glow: 0 0 40px var(--accent-glow);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header h1::before {
+      content: '🏀';
+      -webkit-text-fill-color: initial;
+    }
+
+    /* Team Selector */
+    .team-selector {
+      position: relative;
+    }
+
+    .team-select {
+      width: 100%;
+      padding: 14px 48px 14px 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: all 0.2s ease;
+    }
+
+    .team-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .team-selector::after {
+      content: '▼';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      pointer-events: none;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      padding: 12px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 80px;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 20px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Player Grid */
+    .players-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .players-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+    }
+
+    /* Player Card */
+    .player-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .player-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+    }
+
+    .player-card:active {
+      transform: scale(0.98);
+    }
+
+    .player-image-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+      overflow: hidden;
+    }
+
+    .player-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.3s ease;
+    }
+
+    .player-card:hover .player-image {
+      transform: scale(1.05);
+    }
+
+    .jersey-number {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 8px;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .player-info {
+      padding: 14px;
+    }
+
+    .player-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-position {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Logos Row */
+    .logos-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 28px;
+    }
+
+    .logo-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.2s ease;
+    }
+
+    .logo-badge:hover {
+      transform: scale(1.15);
+      z-index: 10;
+    }
+
+    .logo-badge img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .logo-badge.college {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .logo-badge.previous {
+      opacity: 0.7;
+    }
+
+    .logo-badge.previous:hover {
+      opacity: 1;
+    }
+
+    .logos-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    /* Team Logo Header */
+    .team-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .team-logo-large {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+    }
+
+    .team-info h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .team-info p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    /* Player Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    @media (min-width: 768px) {
+      .modal-overlay {
+        align-items: center;
+      }
+      .modal-content {
+        border-radius: 24px;
+        max-height: 80vh;
+      }
+    }
+
+    .modal-header {
+      position: relative;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-hover);
+    }
+
+    .modal-player-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+    }
+
+    .modal-player-info h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .modal-player-info p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-section {
+      margin-bottom: 24px;
+    }
+
+    .modal-section h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .modal-stat {
+      background: var(--bg-secondary);
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .modal-stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .modal-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .modal-teams-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .modal-team-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-secondary);
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .modal-team-badge img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .modal-team-badge span {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .modal-team-badge.college {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    /* Search */
+    .search-container {
+      padding: 16px 20px 0;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>NBA Players</h1>
+      <div class="team-selector">
+        <select id="teamSelect" class="team-select">
+          <option value="">Select a Team...</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div id="teamHeader" class="team-header" style="display: none;">
+    <img id="teamLogoLarge" class="team-logo-large" src="" alt="">
+    <div class="team-info">
+      <h2 id="teamName"></h2>
+      <p id="teamRecord"></p>
+    </div>
+  </div>
+
+  <div id="statsBar" class="stats-bar" style="display: none;">
+    <div class="stat-item">
+      <span id="rosterCount" class="stat-value">0</span>
+      <span class="stat-label">Players</span>
+    </div>
+    <div class="stat-item">
+      <span id="avgAge" class="stat-value">0</span>
+      <span class="stat-label">Avg Age</span>
+    </div>
+    <div class="stat-item">
+      <span id="avgHeight" class="stat-value">0"</span>
+      <span class="stat-label">Avg Height</span>
+    </div>
+    <div class="stat-item">
+      <span id="collegeCount" class="stat-value">0</span>
+      <span class="stat-label">Colleges</span>
+    </div>
+  </div>
+
+  <div class="search-container" id="searchContainer" style="display: none;">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search players...">
+    </div>
+  </div>
+
+  <main class="players-container">
+    <div id="loadingState" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p class="loading-text">Loading roster...</p>
+    </div>
+
+    <div id="emptyState" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+        <line x1="9" y1="9" x2="9.01" y2="9"/>
+        <line x1="15" y1="9" x2="15.01" y2="9"/>
+      </svg>
+      <p>Select a team to view players</p>
+    </div>
+
+    <div id="playersGrid" class="players-grid"></div>
+  </main>
+
+  <!-- Player Modal -->
+  <div id="playerModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img id="modalPlayerImage" class="modal-player-image" src="" alt="">
+        <div class="modal-player-info">
+          <h3 id="modalPlayerName"></h3>
+          <p id="modalPlayerDetails"></p>
+        </div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4>Player Info</h4>
+          <div class="modal-stats">
+            <div class="modal-stat">
+              <div id="modalAge" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Age</div>
+            </div>
+            <div class="modal-stat">
+              <div id="modalHeight" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Height</div>
+            </div>
+            <div class="modal-stat">
+              <div id="modalWeight" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Weight</div>
+            </div>
+            <div class="modal-stat">
+              <div id="modalExperience" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Experience</div>
+            </div>
+            <div class="modal-stat">
+              <div id="modalSalary" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Salary</div>
+            </div>
+            <div class="modal-stat">
+              <div id="modalDraft" class="modal-stat-value">--</div>
+              <div class="modal-stat-label">Draft</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-section" id="collegeSection">
+          <h4>College</h4>
+          <div id="modalCollege" class="modal-teams-grid"></div>
+        </div>
+        <div class="modal-section" id="teamsSection">
+          <h4>NBA Teams</h4>
+          <div id="modalTeams" class="modal-teams-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // NBA Team data with ESPN IDs
+    const NBA_TEAMS = [
+      { id: '1', abbrev: 'ATL', name: 'Atlanta Hawks', conference: 'East' },
+      { id: '2', abbrev: 'BOS', name: 'Boston Celtics', conference: 'East' },
+      { id: '3', abbrev: 'BKN', name: 'Brooklyn Nets', conference: 'East' },
+      { id: '4', abbrev: 'CHA', name: 'Charlotte Hornets', conference: 'East' },
+      { id: '5', abbrev: 'CHI', name: 'Chicago Bulls', conference: 'East' },
+      { id: '6', abbrev: 'CLE', name: 'Cleveland Cavaliers', conference: 'East' },
+      { id: '7', abbrev: 'DAL', name: 'Dallas Mavericks', conference: 'West' },
+      { id: '8', abbrev: 'DEN', name: 'Denver Nuggets', conference: 'West' },
+      { id: '9', abbrev: 'DET', name: 'Detroit Pistons', conference: 'East' },
+      { id: '10', abbrev: 'GS', name: 'Golden State Warriors', conference: 'West' },
+      { id: '11', abbrev: 'HOU', name: 'Houston Rockets', conference: 'West' },
+      { id: '12', abbrev: 'IND', name: 'Indiana Pacers', conference: 'East' },
+      { id: '13', abbrev: 'LAC', name: 'LA Clippers', conference: 'West' },
+      { id: '14', abbrev: 'LAL', name: 'Los Angeles Lakers', conference: 'West' },
+      { id: '15', abbrev: 'MEM', name: 'Memphis Grizzlies', conference: 'West' },
+      { id: '16', abbrev: 'MIA', name: 'Miami Heat', conference: 'East' },
+      { id: '17', abbrev: 'MIL', name: 'Milwaukee Bucks', conference: 'East' },
+      { id: '18', abbrev: 'MIN', name: 'Minnesota Timberwolves', conference: 'West' },
+      { id: '19', abbrev: 'NO', name: 'New Orleans Pelicans', conference: 'West' },
+      { id: '20', abbrev: 'NY', name: 'New York Knicks', conference: 'East' },
+      { id: '21', abbrev: 'OKC', name: 'Oklahoma City Thunder', conference: 'West' },
+      { id: '22', abbrev: 'ORL', name: 'Orlando Magic', conference: 'East' },
+      { id: '23', abbrev: 'PHI', name: 'Philadelphia 76ers', conference: 'East' },
+      { id: '24', abbrev: 'PHX', name: 'Phoenix Suns', conference: 'West' },
+      { id: '25', abbrev: 'POR', name: 'Portland Trail Blazers', conference: 'West' },
+      { id: '26', abbrev: 'SAC', name: 'Sacramento Kings', conference: 'West' },
+      { id: '27', abbrev: 'SA', name: 'San Antonio Spurs', conference: 'West' },
+      { id: '28', abbrev: 'TOR', name: 'Toronto Raptors', conference: 'East' },
+      { id: '29', abbrev: 'UTAH', name: 'Utah Jazz', conference: 'West' },
+      { id: '30', abbrev: 'WAS', name: 'Washington Wizards', conference: 'East' }
+    ];
+
+    // College ID mapping for logos (ESPN college basketball IDs)
+    const COLLEGE_IDS = {
+      'Duke': '150',
+      'North Carolina': '153',
+      'Kentucky': '96',
+      'Kansas': '2305',
+      'UCLA': '26',
+      'Michigan': '130',
+      'Michigan State': '127',
+      'Gonzaga': '2250',
+      'Villanova': '222',
+      'Arizona': '12',
+      'Florida': '57',
+      'Ohio State': '194',
+      'Texas': '251',
+      'Syracuse': '183',
+      'Louisville': '97',
+      'UConn': '41',
+      'Connecticut': '41',
+      'Indiana': '84',
+      'Auburn': '2',
+      'Tennessee': '2633',
+      'Baylor': '239',
+      'Wisconsin': '275',
+      'Purdue': '2509',
+      'Iowa': '2294',
+      'Illinois': '356',
+      'Virginia': '258',
+      'Maryland': '120',
+      'Oklahoma': '201',
+      'Stanford': '24',
+      'Georgetown': '46',
+      'Wake Forest': '154',
+      'LSU': '99',
+      'Arkansas': '8',
+      'Memphis': '235',
+      'Cincinnati': '2132',
+      'Creighton': '156',
+      'Marquette': '269',
+      'Xavier': '2752',
+      'Butler': '68',
+      'VCU': '2670',
+      'Murray State': '93',
+      'San Diego State': '21',
+      'Houston': '248',
+      'USC': '30',
+      'Oregon': '2483',
+      'Colorado': '38',
+      'Arizona State': '9',
+      'Washington': '264',
+      'Georgia': '61',
+      'Alabama': '333',
+      'South Carolina': '2579',
+      'Notre Dame': '87',
+      'Providence': '2507',
+      'Seton Hall': '2550',
+      "St. John's": '2599',
+      'DePaul': '305',
+      'Dayton': '2168',
+      'Saint Louis': '139',
+      'Davidson': '2166',
+      'George Mason': '2244',
+      'Nevada': '2440',
+      'San Francisco': '2539',
+      'Santa Clara': '2541',
+      'Pepperdine': '2492',
+      'BYU': '252',
+      'Utah': '254',
+      'TCU': '2628',
+      'Texas Tech': '2641',
+      'Oklahoma State': '197',
+      'Kansas State': '2306',
+      'West Virginia': '277',
+      'Iowa State': '66',
+      'Fresno State': '278',
+      'UNLV': '2439',
+      'New Mexico': '167',
+      'Wyoming': '2704',
+      'Boise State': '68',
+      'Colorado State': '36',
+      'Utah State': '328',
+      'Air Force': '2005',
+      'SMU': '2567',
+      'Tulane': '2655',
+      'Tulsa': '2658',
+      'Miami': '2390',
+      'Florida State': '52',
+      'NC State': '152',
+      'Clemson': '228',
+      'Georgia Tech': '59',
+      'Boston College': '103',
+      'Pittsburgh': '221',
+      'Penn State': '213',
+      'Northwestern': '77',
+      'Minnesota': '135',
+      'Nebraska': '158',
+      'Rutgers': '164'
+    };
+
+    let currentPlayers = [];
+    let playerCache = {};
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      populateTeamSelect();
+      document.getElementById('teamSelect').addEventListener('change', onTeamSelect);
+      document.getElementById('searchInput').addEventListener('input', onSearch);
+      document.getElementById('playerModal').addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) closeModal();
+      });
+    });
+
+    function populateTeamSelect() {
+      const select = document.getElementById('teamSelect');
+      const eastTeams = NBA_TEAMS.filter(t => t.conference === 'East').sort((a,b) => a.name.localeCompare(b.name));
+      const westTeams = NBA_TEAMS.filter(t => t.conference === 'West').sort((a,b) => a.name.localeCompare(b.name));
+
+      const eastGroup = document.createElement('optgroup');
+      eastGroup.label = '— Eastern Conference —';
+      eastTeams.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name;
+        eastGroup.appendChild(opt);
+      });
+
+      const westGroup = document.createElement('optgroup');
+      westGroup.label = '— Western Conference —';
+      westTeams.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name;
+        westGroup.appendChild(opt);
+      });
+
+      select.appendChild(eastGroup);
+      select.appendChild(westGroup);
+    }
+
+    async function onTeamSelect(e) {
+      const teamId = e.target.value;
+      if (!teamId) {
+        document.getElementById('emptyState').style.display = 'block';
+        document.getElementById('playersGrid').innerHTML = '';
+        document.getElementById('teamHeader').style.display = 'none';
+        document.getElementById('statsBar').style.display = 'none';
+        document.getElementById('searchContainer').style.display = 'none';
+        return;
+      }
+      await loadTeamRoster(teamId);
+    }
+
+    async function loadTeamRoster(teamId) {
+      const team = NBA_TEAMS.find(t => t.id === teamId);
+      console.log(`\n🏀 Loading roster for: ${team?.name} (ID: ${teamId})`);
+      
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'flex';
+      document.getElementById('playersGrid').innerHTML = '';
+      document.getElementById('searchContainer').style.display = 'none';
+
+      try {
+        // ESPN roster endpoint
+        const rosterUrl = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${teamId}/roster`;
+        console.log(`📡 Fetching roster from: ${rosterUrl}`);
+        const response = await fetch(rosterUrl);
+        const data = await response.json();
+        
+        console.log(`✅ Roster API response:`, data);
+        console.log(`📋 Team from API:`, data.team?.displayName || data.team?.name || 'Unknown');
+        console.log(`👥 Athletes count:`, data.athletes?.length || 0);
+
+        // Update team header
+        document.getElementById('teamHeader').style.display = 'flex';
+        document.getElementById('teamLogoLarge').src = `https://a.espncdn.com/i/teamlogos/nba/500/${team.abbrev.toLowerCase()}.png`;
+        document.getElementById('teamName').textContent = team.name;
+
+        // Process athletes - check both data.athletes and grouped roster formats
+        let athletes = [];
+        
+        // Format 1: Direct athletes array
+        if (Array.isArray(data.athletes)) {
+          athletes = data.athletes;
+          console.log(`📦 Format 1: Direct athletes array`);
+        }
+        // Format 2: Grouped by position (guards, forwards, centers)
+        else if (data.athletes && typeof data.athletes === 'object') {
+          console.log(`📦 Format 2: Grouped athletes object`);
+          Object.keys(data.athletes).forEach(key => {
+            console.log(`  Group "${key}":`, data.athletes[key]?.length || 0, 'players');
+            if (Array.isArray(data.athletes[key])) {
+              athletes = athletes.concat(data.athletes[key]);
+            }
+          });
+        }
+        // Format 3: Check for roster property
+        if (data.roster && Array.isArray(data.roster)) {
+          console.log(`📦 Format 3: roster property array`);
+          athletes = data.roster;
+        }
+        
+        console.log(`✅ Total athletes extracted: ${athletes.length}`);
+        
+        // Log each athlete for debugging
+        athletes.forEach((ath, idx) => {
+          console.log(`  [${idx}] ${ath.displayName || ath.fullName} #${ath.jersey} - ID: ${ath.id}`);
+        });
+
+        currentPlayers = athletes.map(athlete => ({
+          id: athlete.id,
+          name: athlete.displayName || athlete.fullName,
+          firstName: athlete.firstName,
+          lastName: athlete.lastName,
+          jersey: athlete.jersey || '--',
+          position: athlete.position?.abbreviation || athlete.position?.name || '',
+          headshot: athlete.headshot?.href || `https://a.espncdn.com/i/headshots/nba/players/full/${athlete.id}.png`,
+          height: athlete.displayHeight || '',
+          weight: athlete.displayWeight || '',
+          age: athlete.age || '',
+          birthDate: athlete.dateOfBirth,
+          birthPlace: athlete.birthPlace?.city ? `${athlete.birthPlace.city}, ${athlete.birthPlace.state || athlete.birthPlace.country || ''}` : '',
+          college: athlete.college?.name || '',
+          collegeId: athlete.college?.id,
+          experience: athlete.experience?.years ?? 'R',
+          salary: athlete.contract?.salary,
+          draft: athlete.draft,
+          status: athlete.status?.type || 'active',
+          injuries: athlete.injuries || []
+        }));
+
+        console.log(`✅ Processed ${currentPlayers.length} players`);
+
+        // Get player transaction history for previous teams
+        await enrichPlayersWithHistory(currentPlayers, teamId);
+
+        // Update stats
+        updateStats(currentPlayers);
+
+        // Render players
+        renderPlayers(currentPlayers);
+
+        document.getElementById('searchContainer').style.display = 'block';
+        document.getElementById('statsBar').style.display = 'flex';
+
+      } catch (err) {
+        console.error('❌ Failed to load roster:', err);
+        document.getElementById('playersGrid').innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <p>Failed to load roster. Please try again.</p>
+          </div>
+        `;
+      } finally {
+        document.getElementById('loadingState').style.display = 'none';
+      }
+    }
+
+    async function enrichPlayersWithHistory(players, currentTeamId) {
+      console.log(`🔍 Enriching ${players.length} players with team history (current team: ${currentTeamId})`);
+      
+      const promises = players.map(async (player) => {
+        const previousTeams = new Set();
+        console.log(`\n👤 Processing: ${player.name} (ID: ${player.id})`);
+        
+        // ===== METHOD 1: Player SPLITS endpoint - best for team history =====
+        try {
+          const splitsUrl = `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${player.id}/splits`;
+          console.log(`  📡 Method 1 - Splits URL: ${splitsUrl}`);
+          const resp = await fetch(splitsUrl);
+          
+          if (resp.ok) {
+            const data = await resp.json();
+            console.log(`  ✅ Method 1 Splits response:`, JSON.stringify(data).substring(0, 500));
+            
+            // Log all top level keys
+            console.log(`  Keys:`, Object.keys(data));
+            
+            // Check splitCategories for "By Team" splits
+            if (data.splitCategories) {
+              console.log(`    📊 Found splitCategories:`, data.splitCategories.length);
+              data.splitCategories.forEach(cat => {
+                console.log(`      Category: ${cat.displayName || cat.name}`);
+                if (cat.splits) {
+                  cat.splits.forEach(split => {
+                    console.log(`        Split:`, split.displayName, 'team:', split.team?.id);
+                    if (split.team && split.team.id && String(split.team.id) !== String(currentTeamId)) {
+                      previousTeams.add(String(split.team.id));
+                    }
+                  });
+                }
+              });
+            }
+            
+            // Check filters for team info
+            if (data.filters) {
+              console.log(`    🔍 Found filters:`, data.filters.length);
+              data.filters.forEach(filter => {
+                if (filter.name === 'team' || filter.displayName?.toLowerCase().includes('team')) {
+                  console.log(`      Team filter options:`, filter.options);
+                  if (filter.options) {
+                    filter.options.forEach(opt => {
+                      if (opt.value && String(opt.value) !== String(currentTeamId)) {
+                        previousTeams.add(String(opt.value));
+                      }
+                    });
+                  }
+                }
+              });
+            }
+          } else {
+            console.log(`  ❌ Method 1 failed: ${resp.status}`);
+          }
+        } catch (e) {
+          console.log(`  ❌ Method 1 error:`, e.message);
+        }
+
+        // ===== METHOD 2: Core athlete endpoint =====
+        if (previousTeams.size === 0) {
+          try {
+            const coreUrl = `https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/${player.id}`;
+            console.log(`  📡 Method 2 - Core API URL: ${coreUrl}`);
+            const resp = await fetch(coreUrl);
+            
+            if (resp.ok) {
+              const data = await resp.json();
+              console.log(`  ✅ Method 2 Core response keys:`, Object.keys(data));
+              
+              // Check experience/teams
+              if (data.experience) {
+                console.log(`    Experience:`, data.experience);
+              }
+              
+              // Check if teams array exists
+              if (data.team) {
+                console.log(`    Current team $ref:`, data.team.$ref);
+              }
+              
+              // Check transactions
+              if (data.transactions) {
+                console.log(`    Transactions $ref:`, data.transactions.$ref);
+                // Could follow this link to get actual transactions
+              }
+              
+              // Check for college
+              if (data.college) {
+                console.log(`    College:`, data.college);
+              }
+            } else {
+              console.log(`  ❌ Method 2 failed: ${resp.status}`);
+            }
+          } catch (e) {
+            console.log(`  ❌ Method 2 error:`, e.message);
+          }
+        }
+
+        // ===== METHOD 3: Player bio page scrape-style endpoint =====
+        if (previousTeams.size === 0) {
+          try {
+            const bioUrl = `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${player.id}/bio`;
+            console.log(`  📡 Method 3 - Bio URL: ${bioUrl}`);
+            const resp = await fetch(bioUrl);
+            
+            if (resp.ok) {
+              const data = await resp.json();
+              console.log(`  ✅ Method 3 Bio response keys:`, Object.keys(data));
+              console.log(`  Bio data:`, JSON.stringify(data).substring(0, 800));
+              
+              // Check sections for career info
+              if (data.sections) {
+                data.sections.forEach(section => {
+                  console.log(`    Section: ${section.title || section.type}`);
+                  if (section.content) {
+                    console.log(`      Content:`, section.content.substring(0, 200));
+                  }
+                });
+              }
+            } else {
+              console.log(`  ❌ Method 3 failed: ${resp.status}`);
+            }
+          } catch (e) {
+            console.log(`  ❌ Method 3 error:`, e.message);
+          }
+        }
+
+        // ===== METHOD 4: Event log / Transactions endpoint =====
+        if (previousTeams.size === 0) {
+          try {
+            const transUrl = `https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/${player.id}/transactions?limit=100`;
+            console.log(`  📡 Method 4 - Transactions URL: ${transUrl}`);
+            const resp = await fetch(transUrl);
+            
+            if (resp.ok) {
+              const data = await resp.json();
+              console.log(`  ✅ Method 4 Transactions response:`, JSON.stringify(data).substring(0, 500));
+              
+              if (data.items) {
+                console.log(`    Found ${data.items.length} transactions`);
+                for (const item of data.items.slice(0, 5)) {
+                  // Each item might be a $ref, need to fetch
+                  if (item.$ref) {
+                    console.log(`      Transaction ref:`, item.$ref);
+                    try {
+                      const txResp = await fetch(item.$ref);
+                      if (txResp.ok) {
+                        const txData = await txResp.json();
+                        console.log(`        Transaction data:`, txData.type, txData.from?.displayName, '->', txData.to?.displayName);
+                        if (txData.from?.id && String(txData.from.id) !== String(currentTeamId)) {
+                          previousTeams.add(String(txData.from.id));
+                        }
+                        if (txData.to?.id && String(txData.to.id) !== String(currentTeamId)) {
+                          previousTeams.add(String(txData.to.id));
+                        }
+                      }
+                    } catch (e) {
+                      console.log(`        Could not fetch transaction:`, e.message);
+                    }
+                  }
+                }
+              }
+            } else {
+              console.log(`  ❌ Method 4 failed: ${resp.status}`);
+            }
+          } catch (e) {
+            console.log(`  ❌ Method 4 error:`, e.message);
+          }
+        }
+
+        // ===== METHOD 5: Statistics with team breakdown =====
+        if (previousTeams.size === 0) {
+          try {
+            const statsUrl = `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${player.id}/statistics/byseason`;
+            console.log(`  📡 Method 5 - By Season Stats URL: ${statsUrl}`);
+            const resp = await fetch(statsUrl);
+            
+            if (resp.ok) {
+              const data = await resp.json();
+              console.log(`  ✅ Method 5 By-Season response:`, JSON.stringify(data).substring(0, 500));
+              
+              // Look for team info in season data
+              if (data.seasonStats) {
+                data.seasonStats.forEach(season => {
+                  console.log(`    Season: ${season.season}`, 'team:', season.team?.id);
+                  if (season.team && String(season.team.id) !== String(currentTeamId)) {
+                    previousTeams.add(String(season.team.id));
+                  }
+                });
+              }
+            } else {
+              console.log(`  ❌ Method 5 failed: ${resp.status}`);
+            }
+          } catch (e) {
+            console.log(`  ❌ Method 5 error:`, e.message);
+          }
+        }
+
+        // ===== METHOD 6: Use draft team as a fallback =====
+        if (player.draft && player.draft.team && String(player.draft.team.id) !== String(currentTeamId)) {
+          console.log(`  📝 Method 6 - Draft team: ${player.draft.team.displayName} (${player.draft.team.id})`);
+          previousTeams.add(String(player.draft.team.id));
+        }
+
+        player.previousTeamIds = Array.from(previousTeams).slice(0, 6);
+        console.log(`  ✅ ${player.name} final previous teams:`, player.previousTeamIds);
+      });
+
+      await Promise.allSettled(promises);
+      console.log('\n🏁 Finished enriching all players with team history');
+    }
+
+    function updateStats(players) {
+      const activePlayers = players.filter(p => p.status === 'active' || !p.status);
+      document.getElementById('rosterCount').textContent = players.length;
+
+      // Average age
+      const ages = players.filter(p => p.age).map(p => parseInt(p.age));
+      const avgAge = ages.length ? (ages.reduce((a,b) => a+b, 0) / ages.length).toFixed(1) : '--';
+      document.getElementById('avgAge').textContent = avgAge;
+
+      // Average height (convert to inches then display)
+      const heights = players.filter(p => p.height).map(p => {
+        const parts = p.height.replace(/"/g, '').split("'");
+        if (parts.length === 2) {
+          return parseInt(parts[0]) * 12 + parseInt(parts[1]);
+        }
+        return null;
+      }).filter(Boolean);
+      if (heights.length) {
+        const avgInches = heights.reduce((a,b) => a+b, 0) / heights.length;
+        const ft = Math.floor(avgInches / 12);
+        const inch = Math.round(avgInches % 12);
+        document.getElementById('avgHeight').textContent = `${ft}'${inch}"`;
+      } else {
+        document.getElementById('avgHeight').textContent = '--';
+      }
+
+      // Unique colleges
+      const colleges = new Set(players.filter(p => p.college).map(p => p.college));
+      document.getElementById('collegeCount').textContent = colleges.size;
+    }
+
+    function renderPlayers(players) {
+      const grid = document.getElementById('playersGrid');
+      grid.innerHTML = '';
+
+      if (players.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <p>No players found</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by jersey number
+      const sorted = [...players].sort((a,b) => {
+        const numA = parseInt(a.jersey) || 999;
+        const numB = parseInt(b.jersey) || 999;
+        return numA - numB;
+      });
+
+      sorted.forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        card.onclick = () => openModal(player);
+
+        // Build logos row
+        let logosHtml = '';
+        
+        // College logo
+        if (player.college) {
+          const collegeId = getCollegeId(player.college);
+          if (collegeId) {
+            logosHtml += `
+              <div class="logo-badge college" title="${player.college}">
+                <img src="https://a.espncdn.com/i/teamlogos/ncaa/500/${collegeId}.png" 
+                     alt="${player.college}" 
+                     onerror="this.parentElement.style.display='none'">
+              </div>
+            `;
+          }
+        }
+
+        // Previous NBA teams
+        if (player.previousTeamIds && player.previousTeamIds.length > 0) {
+          if (logosHtml) {
+            logosHtml += '<div class="logos-divider"></div>';
+          }
+          player.previousTeamIds.forEach(teamId => {
+            const prevTeam = NBA_TEAMS.find(t => t.id === teamId);
+            if (prevTeam) {
+              logosHtml += `
+                <div class="logo-badge previous" title="${prevTeam.name}">
+                  <img src="https://a.espncdn.com/i/teamlogos/nba/500/${prevTeam.abbrev.toLowerCase()}.png" 
+                       alt="${prevTeam.name}">
+                </div>
+              `;
+            }
+          });
+        }
+
+        card.innerHTML = `
+          <div class="player-image-container">
+            <img class="player-image" 
+                 src="${player.headshot}" 
+                 alt="${player.name}"
+                 onerror="this.src='https://a.espncdn.com/combiner/i?img=/i/headshots/nophoto.png&w=200&h=200'">
+            <div class="jersey-number">#${player.jersey}</div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">${player.name}</div>
+            <div class="player-position">${player.position}</div>
+            <div class="logos-row">${logosHtml || '<span style="color: var(--text-muted); font-size: 0.7rem;">No college/prev teams</span>'}</div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function getCollegeId(collegeName) {
+      // Direct lookup
+      if (COLLEGE_IDS[collegeName]) return COLLEGE_IDS[collegeName];
+      
+      // Fuzzy match
+      const normalized = collegeName.toLowerCase();
+      for (const [name, id] of Object.entries(COLLEGE_IDS)) {
+        if (normalized.includes(name.toLowerCase()) || name.toLowerCase().includes(normalized)) {
+          return id;
+        }
+      }
+      return null;
+    }
+
+    function getNbaTeamLogo(teamId) {
+      const team = NBA_TEAMS.find(t => t.id === teamId);
+      return team ? `https://a.espncdn.com/i/teamlogos/nba/500/${team.abbrev.toLowerCase()}.png` : '';
+    }
+
+    function onSearch(e) {
+      const query = e.target.value.toLowerCase().trim();
+      if (!query) {
+        renderPlayers(currentPlayers);
+        return;
+      }
+      const filtered = currentPlayers.filter(p => 
+        p.name.toLowerCase().includes(query) ||
+        p.jersey.toString().includes(query) ||
+        (p.position && p.position.toLowerCase().includes(query)) ||
+        (p.college && p.college.toLowerCase().includes(query))
+      );
+      renderPlayers(filtered);
+    }
+
+    function openModal(player) {
+      document.getElementById('modalPlayerImage').src = player.headshot;
+      document.getElementById('modalPlayerName').textContent = player.name;
+      document.getElementById('modalPlayerDetails').textContent = `#${player.jersey} | ${player.position}`;
+      
+      document.getElementById('modalAge').textContent = player.age || '--';
+      document.getElementById('modalHeight').textContent = player.height || '--';
+      document.getElementById('modalWeight').textContent = player.weight || '--';
+      document.getElementById('modalExperience').textContent = player.experience === 0 ? 'Rookie' : (player.experience ? `${player.experience} yr` : '--');
+      document.getElementById('modalSalary').textContent = player.salary ? `$${(player.salary / 1000000).toFixed(1)}M` : '--';
+      
+      // Draft info
+      if (player.draft && player.draft.year) {
+        document.getElementById('modalDraft').textContent = `'${String(player.draft.year).slice(-2)} #${player.draft.selection || '?'}`;
+      } else {
+        document.getElementById('modalDraft').textContent = 'Undrafted';
+      }
+
+      // College section
+      const collegeSection = document.getElementById('collegeSection');
+      const collegeContainer = document.getElementById('modalCollege');
+      collegeContainer.innerHTML = '';
+      if (player.college) {
+        collegeSection.style.display = 'block';
+        const collegeId = getCollegeId(player.college);
+        collegeContainer.innerHTML = `
+          <div class="modal-team-badge college">
+            ${collegeId ? `<img src="https://a.espncdn.com/i/teamlogos/ncaa/500/${collegeId}.png" alt="${player.college}" onerror="this.style.display='none'">` : ''}
+            <span>${player.college}</span>
+          </div>
+        `;
+      } else {
+        collegeSection.style.display = 'none';
+      }
+
+      // Teams section
+      const teamsSection = document.getElementById('teamsSection');
+      const teamsContainer = document.getElementById('modalTeams');
+      teamsContainer.innerHTML = '';
+      
+      // Current team
+      const currentTeamId = document.getElementById('teamSelect').value;
+      const currentTeam = NBA_TEAMS.find(t => t.id === currentTeamId);
+      if (currentTeam) {
+        teamsContainer.innerHTML += `
+          <div class="modal-team-badge">
+            <img src="https://a.espncdn.com/i/teamlogos/nba/500/${currentTeam.abbrev.toLowerCase()}.png" alt="${currentTeam.name}">
+            <span>${currentTeam.name} (Current)</span>
+          </div>
+        `;
+      }
+
+      // Previous teams
+      if (player.previousTeamIds && player.previousTeamIds.length > 0) {
+        player.previousTeamIds.forEach(teamId => {
+          const prevTeam = NBA_TEAMS.find(t => t.id === teamId);
+          if (prevTeam) {
+            teamsContainer.innerHTML += `
+              <div class="modal-team-badge">
+                <img src="https://a.espncdn.com/i/teamlogos/nba/500/${prevTeam.abbrev.toLowerCase()}.png" alt="${prevTeam.name}">
+                <span>${prevTeam.name}</span>
+              </div>
+            `;
+          }
+        });
+      }
+
+      teamsSection.style.display = teamsContainer.children.length > 0 ? 'block' : 'none';
+
+      document.getElementById('playerModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('playerModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
