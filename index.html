@@ -1522,9 +1522,17 @@
           if (teamStats) teamStats.finalFour += 1;
         });
 
+        // Track processed game signatures per tournament to avoid counting duplicated/corrupt entries
+        const processedGames = new Set();
         roundKeys.forEach(roundKey => {
           const playedThisRound = new Set();
           (tournament.rounds[roundKey] || []).forEach(game => {
+            if (!game || typeof game !== 'object') return;
+            // Build a stable signature for the game to detect duplicates
+            const sig = `${roundKey}|${game.seed1 ?? ''}|${game.seed2 ?? ''}|${game.team1 ?? ''}|${game.team2 ?? ''}|${game.score1 ?? ''}|${game.score2 ?? ''}`;
+            if (processedGames.has(sig)) return; // skip exact duplicate entries
+            processedGames.add(sig);
+
             // Check for placeholder/duplicate teams in the same round
             if (playedThisRound.has(game.team1) || playedThisRound.has(game.team2)) {
               return; // Skip duplicate matchups in same round (placeholder data)
@@ -1706,8 +1714,9 @@
         const winPct = totalGames ? (entry.winPct * 100).toFixed(0) : '0';
         row.dataset.team = entry.team;
         row.classList.add('clickable-row');
+        const logo = getTeamLogoUrl(entry.team);
         row.innerHTML = `
-          <td>${entry.team}</td>
+          <td>${logo ? `<img src="${logo}" alt="${entry.team} logo" class="team-logo small" onerror="this.style.display='none'"> ` : ''}${entry.team}</td>
           <td>${entry.titles || '-'}</td>
           <td>${entry.wins}</td>
           <td>${entry.losses}</td>
@@ -1918,13 +1927,14 @@
             const scoreLine = (item.teamScore !== null && item.opponentScore !== null)
               ? `${item.teamScore}-${item.opponentScore}`
               : '';
+            const opponentLogo = getTeamLogoUrl(item.opponent);
             li.innerHTML = `
               <div class="game-history-header">
                 <span class="game-history-year">${item.year}</span>
                 <span class="game-history-round">${item.round}</span>
               </div>
               <div class="game-history-matchup">
-                ${item.result === 'W' ? 'W' : 'L'} vs <strong>${item.opponent}</strong> ${scoreLine}
+                ${item.result === 'W' ? 'W' : 'L'} vs ${opponentLogo ? ('<img src="' + opponentLogo + '" class="team-logo small" onerror="this.style.display=\'none\'"> ') : ''}<strong>${item.opponent}</strong> ${scoreLine}
               </div>
               <div class="game-history-detail">
                 ${item.teamSeed ? `#${item.teamSeed}` : ''} vs ${item.opponentSeed ? `#${item.opponentSeed}` : ''}
